@@ -9,9 +9,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "flashcards")
 public class Flashcard {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String question;

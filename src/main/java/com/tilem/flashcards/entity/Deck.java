@@ -11,8 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "decks")
 public class Deck {
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 
@@ -22,6 +25,4 @@ public class Deck {
 
     @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL)
     private List<Flashcard> flashcards;
-
-    // Getters and setters
 }

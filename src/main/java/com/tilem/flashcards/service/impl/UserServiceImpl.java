@@ -2,8 +2,6 @@ package com.tilem.flashcards.service.impl;
 
 import com.tilem.flashcards.dto.UserDTO;
 import com.tilem.flashcards.entity.User;
-import com.tilem.flashcards.exception.AppException;
-import com.tilem.flashcards.mapper.UserMapper;
 import com.tilem.flashcards.repository.UserRepository;
 import com.tilem.flashcards.service.UserService;
 import org.springframework.stereotype.Service;
@@ -13,23 +11,46 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepo;
-    private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepo, UserMapper userMapper) {
+    private final UserRepository userRepo;
+
+    public UserServiceImpl(UserRepository userRepo) {
         this.userRepo = userRepo;
-        this.userMapper = userMapper;
     }
 
     @Override
     public List<UserDTO> getAllUsers() {
-        return userRepo.findAll().stream().map(userMapper::toDto).collect(Collectors.toList());
+        return userRepo.findAll().stream().map(this::map).collect(Collectors.toList());
     }
 
     @Override
-    public UserDTO getUserById(Long id) throws AppException {
-        User user = userRepo.findById(id)
-            .orElseThrow(() -> new AppException("User not found with id " + id));
-        return userMapper.toDto(user);
+    public UserDTO getUserById(Long id) {
+        return map(userRepo.findById(id).orElseThrow());
+    }
+
+    @Override
+    public UserDTO createUser(UserDTO dto) {
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        return map(userRepo.save(user));
+    }
+
+    @Override
+    public UserDTO updateUser(Long id, UserDTO dto) {
+        User user = userRepo.findById(id).orElseThrow();
+        user.setUsername(dto.getUsername());
+        return map(userRepo.save(user));
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userRepo.deleteById(id);
+    }
+
+    private UserDTO map(User user) {
+        return UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .build();
     }
 }

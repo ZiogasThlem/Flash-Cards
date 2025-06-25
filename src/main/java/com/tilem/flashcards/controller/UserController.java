@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -24,5 +25,20 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDTO getUser(@PathVariable Long id) throws AppException {
         return userService.getUserById(id);
+    }
+
+    @PostMapping
+    public UserDTO createUser(@RequestBody UserDTO dto) {
+        return userService.createUser(dto);
+    }
+
+    @PutMapping("/{id}")
+    public UserDTO updateUser(@PathVariable Long id, @RequestBody UserDTO dto) {
+        return userService.updateUser(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
     }
 }
