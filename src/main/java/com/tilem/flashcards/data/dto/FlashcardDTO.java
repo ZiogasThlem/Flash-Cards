@@ -1,4 +1,4 @@
-package com.tilem.flashcards.dto;
+package com.tilem.flashcards.data.dto;
 
 import lombok.*;
 

@@ -1,8 +1,8 @@
 package com.tilem.flashcards.service.impl;
 
-import com.tilem.flashcards.dto.FlashcardDTO;
-import com.tilem.flashcards.entity.Deck;
-import com.tilem.flashcards.entity.Flashcard;
+import com.tilem.flashcards.data.dto.FlashcardDTO;
+import com.tilem.flashcards.data.entity.Deck;
+import com.tilem.flashcards.data.entity.Flashcard;
 import com.tilem.flashcards.repository.DeckRepository;
 import com.tilem.flashcards.repository.FlashcardRepository;
 import com.tilem.flashcards.service.FlashcardService;

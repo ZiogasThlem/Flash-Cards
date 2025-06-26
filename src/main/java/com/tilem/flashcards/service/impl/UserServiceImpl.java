@@ -1,7 +1,7 @@
 package com.tilem.flashcards.service.impl;
 
-import com.tilem.flashcards.dto.UserDTO;
-import com.tilem.flashcards.entity.User;
+import com.tilem.flashcards.data.dto.UserDTO;
+import com.tilem.flashcards.data.entity.User;
 import com.tilem.flashcards.repository.UserRepository;
 import com.tilem.flashcards.service.UserService;
 import org.springframework.stereotype.Service;

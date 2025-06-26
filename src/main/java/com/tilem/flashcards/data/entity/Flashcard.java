@@ -1,4 +1,4 @@
-package com.tilem.flashcards.entity;
+package com.tilem.flashcards.data.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Table(name = "flashcards")
-public class Flashcard {
+public class Flashcard extends DbEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +23,19 @@ public class Flashcard {
     @ManyToOne
     @JoinColumn(name = "deck_id")
     private Deck deck;
+
+    @Override
+    public String getEntityTitle() {
+        return question;
+    }
+
+    @Override
+    public String getSimpleLabel() {
+        return question;
+    }
+
+    @Override
+    public Long getUniqueID() {
+        return id;
+    }
 }

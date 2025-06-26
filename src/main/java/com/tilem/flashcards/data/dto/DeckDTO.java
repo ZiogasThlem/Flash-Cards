@@ -1,4 +1,4 @@
-package com.tilem.flashcards.dto;
+package com.tilem.flashcards.data.dto;
 
 import lombok.*;
 
@@ -13,6 +13,6 @@ import java.util.List;
 public class DeckDTO {
     public Long id;
     public String name;
-    public Long userId;
-    public List<Long> flashcardIds;
+    public List<String> users;
+    public List<String> flashcards;
 }

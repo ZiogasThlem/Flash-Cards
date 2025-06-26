@@ -1,6 +1,6 @@
 package com.tilem.flashcards.service;
 
-import com.tilem.flashcards.dto.DeckDTO;
+import com.tilem.flashcards.data.dto.DeckDTO;
 
 import java.util.List;
 
@@ -10,5 +10,4 @@ public interface DeckService {
     DeckDTO createDeck(DeckDTO dto);
     DeckDTO updateDeck(Long id, DeckDTO dto);
     void deleteDeck(Long id);
-    List<DeckDTO> getDecksByUser(Long userId);
 }

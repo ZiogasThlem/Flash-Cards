@@ -1,7 +1,9 @@
 package com.tilem.flashcards.service.impl;
 
-import com.tilem.flashcards.dto.DeckDTO;
-import com.tilem.flashcards.entity.Deck;
+import com.tilem.flashcards.data.dto.DeckDTO;
+import com.tilem.flashcards.data.entity.Deck;
+import com.tilem.flashcards.data.entity.Flashcard;
+import com.tilem.flashcards.data.entity.User;
 import com.tilem.flashcards.repository.DeckRepository;
 import com.tilem.flashcards.repository.UserRepository;
 import com.tilem.flashcards.service.DeckService;
@@ -14,11 +16,9 @@ import java.util.stream.Collectors;
 public class DeckServiceImpl implements DeckService {
 
     private final DeckRepository deckRepo;
-    private final UserRepository userRepo;
 
     public DeckServiceImpl(DeckRepository deckRepo, UserRepository userRepo) {
         this.deckRepo = deckRepo;
-        this.userRepo = userRepo;
     }
 
     @Override
@@ -35,7 +35,6 @@ public class DeckServiceImpl implements DeckService {
     public DeckDTO createDeck(DeckDTO dto) {
         Deck deck = new Deck();
         deck.setName(dto.getName());
-        deck.setUser(userRepo.findById(dto.getUserId()).orElseThrow());
         return map(deckRepo.save(deck));
     }
 
@@ -51,16 +50,12 @@ public class DeckServiceImpl implements DeckService {
         deckRepo.deleteById(id);
     }
 
-    @Override
-    public List<DeckDTO> getDecksByUser(Long userId) {
-        return deckRepo.findByUserId(userId).stream().map(this::map).collect(Collectors.toList());
-    }
-
     private DeckDTO map(Deck deck) {
         return DeckDTO.builder()
-                .id(deck.getId())
+                .id (deck.getId())
                 .name(deck.getName())
-                .userId(deck.getUser().getId())
+                .users(deck.getUsers().stream().map(User::getDetailedLabel).collect(Collectors.toList()))
+                .flashcards(deck.getFlashcards().stream().map(Flashcard::getSimpleLabel).collect(Collectors.toList()))
                 .build();
     }
 }

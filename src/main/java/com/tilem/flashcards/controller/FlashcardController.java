@@ -1,6 +1,6 @@
 package com.tilem.flashcards.controller;
 
-import com.tilem.flashcards.dto.FlashcardDTO;
+import com.tilem.flashcards.data.dto.FlashcardDTO;
 import com.tilem.flashcards.service.FlashcardService;
 import org.springframework.web.bind.annotation.*;
 

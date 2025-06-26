@@ -1,4 +1,4 @@
-package com.tilem.flashcards.exception;
+package com.tilem.flashcards.util;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

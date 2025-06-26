@@ -1,6 +1,6 @@
 package com.tilem.flashcards.service;
 
-import com.tilem.flashcards.dto.FlashcardDTO;
+import com.tilem.flashcards.data.dto.FlashcardDTO;
 import java.util.List;
 
 public interface FlashcardService {

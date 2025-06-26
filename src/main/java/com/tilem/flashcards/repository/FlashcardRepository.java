@@ -1,6 +1,6 @@
 package com.tilem.flashcards.repository;
 
-import com.tilem.flashcards.entity.Flashcard;
+import com.tilem.flashcards.data.entity.Flashcard;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

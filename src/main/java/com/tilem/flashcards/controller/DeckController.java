@@ -1,6 +1,6 @@
 package com.tilem.flashcards.controller;
 
-import com.tilem.flashcards.dto.DeckDTO;
+import com.tilem.flashcards.data.dto.DeckDTO;
 import com.tilem.flashcards.service.DeckService;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,8 +41,4 @@ public class DeckController {
         deckService.deleteDeck(id);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<DeckDTO> getByUser(@PathVariable Long userId) {
-        return deckService.getDecksByUser(userId);
-    }
 }
