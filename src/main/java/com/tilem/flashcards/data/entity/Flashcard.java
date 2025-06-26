@@ -1,6 +1,7 @@
 package com.tilem.flashcards.data.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
@@ -16,8 +17,10 @@ public class Flashcard extends DbEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String question;
 
+    @NotBlank
     private String answer;
 
     @ManyToOne

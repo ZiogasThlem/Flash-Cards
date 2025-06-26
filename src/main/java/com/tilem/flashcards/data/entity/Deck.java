@@ -1,6 +1,8 @@
 package com.tilem.flashcards.data.entity;
 
 import jakarta.persistence.*;
+
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -19,7 +21,8 @@ public class Deck extends DbEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
+    @NotBlank
     private String name;
 
     @ManyToMany(mappedBy = "decks")

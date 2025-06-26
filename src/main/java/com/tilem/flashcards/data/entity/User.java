@@ -22,7 +22,7 @@ public class User extends DbEntity {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_decks",
             joinColumns = @JoinColumn(name = "user_id"),
