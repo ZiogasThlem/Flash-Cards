@@ -29,12 +29,20 @@ public class UserController {
 
     @PostMapping
     public UserDTO createUser(@RequestBody UserDTO dto) {
-        return userService.createUser(dto);
+        try {
+            return userService.createUser(dto);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PutMapping("/{id}")
     public UserDTO updateUser(@PathVariable Long id, @RequestBody UserDTO dto) {
-        return userService.updateUser(id, dto);
+        try {
+            return userService.updateUser(id, dto);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @DeleteMapping("/{id}")

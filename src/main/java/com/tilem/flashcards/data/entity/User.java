@@ -22,6 +22,8 @@ public class User extends DbEntity {
     @Column(unique = true, nullable = false)
     private String username;
 
+    private transient String password;
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_decks",

@@ -4,6 +4,7 @@ import com.tilem.flashcards.data.dto.UserDTO;
 import com.tilem.flashcards.data.entity.User;
 import com.tilem.flashcards.repository.UserRepository;
 import com.tilem.flashcards.service.UserService;
+import com.tilem.flashcards.util.EncryptionUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,26 +21,34 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> getAllUsers() {
-        return userRepo.findAll().stream().map(this::map).collect(Collectors.toList());
+        return userRepo.findAll().stream()
+                .map(this::mapWithoutPassword)
+                .collect(Collectors.toList());
     }
 
     @Override
     public UserDTO getUserById(Long id) {
-        return map(userRepo.findById(id).orElseThrow());
+        return mapWithoutPassword(userRepo.findById(id).orElseThrow());
     }
 
     @Override
-    public UserDTO createUser(UserDTO dto) {
+    public UserDTO createUser(UserDTO dto) throws Exception {
         User user = new User();
         user.setUsername(dto.getUsername());
-        return map(userRepo.save(user));
+        user.setPassword(EncryptionUtil.encrypt(dto.getPassword()));
+        return mapWithoutPassword(userRepo.save(user));
     }
 
     @Override
-    public UserDTO updateUser(Long id, UserDTO dto) {
+    public UserDTO updateUser(Long id, UserDTO dto) throws Exception {
         User user = userRepo.findById(id).orElseThrow();
-        user.setUsername(dto.getUsername());
-        return map(userRepo.save(user));
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            user.setPassword(EncryptionUtil.encrypt(dto.getPassword()));
+        }
+        if (dto.getUsername() != null && !dto.getUsername().isBlank()) {
+            user.setUsername(dto.getUsername());
+        }
+        return mapWithoutPassword(userRepo.save(user));
     }
 
     @Override
@@ -47,10 +56,16 @@ public class UserServiceImpl implements UserService {
         userRepo.deleteById(id);
     }
 
-    private UserDTO map(User user) {
+    public String getDecryptedPassword(Long userId) throws Exception {
+        User user = userRepo.findById(userId).orElseThrow();
+        return EncryptionUtil.decrypt(user.getPassword());
+    }
+
+    private UserDTO mapWithoutPassword(User user) {
         return UserDTO.builder()
                 .id(user.getId())
                 .username(user.getUsername())
+                .password(user.getPassword())
                 .build();
     }
 }
