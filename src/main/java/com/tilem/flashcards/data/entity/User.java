@@ -1,6 +1,7 @@
 package com.tilem.flashcards.data.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -19,9 +20,11 @@ public class User extends DbEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, name = "username")
+    @NotBlank
     private String username;
 
+    @Column(name = "password")
     private transient String password;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)

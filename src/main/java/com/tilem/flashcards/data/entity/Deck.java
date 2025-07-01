@@ -1,5 +1,6 @@
 package com.tilem.flashcards.data.entity;
 
+import com.tilem.flashcards.data.enums.DeckCategory;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.NotBlank;
@@ -24,6 +25,10 @@ public class Deck extends DbEntity {
     @Column
     @NotBlank
     private String name;
+
+    private String description;
+
+    private DeckCategory category;
 
     @ManyToMany(mappedBy = "decks")
     @Builder.Default

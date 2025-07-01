@@ -1,5 +1,6 @@
 package com.tilem.flashcards.data.entity;
 
+import com.tilem.flashcards.data.enums.YesNo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -18,10 +19,17 @@ public class Flashcard extends DbEntity {
     private Long id;
 
     @NotBlank
+    @Column(name = "question")
     private String question;
 
     @NotBlank
     private String answer;
+
+    private YesNo hasManyCorrectAnswers;
+
+    private YesNo hasImageData;
+
+    private BlobData imageData;
 
     @ManyToOne
     @JoinColumn(name = "deck_id")
