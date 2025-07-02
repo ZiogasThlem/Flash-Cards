@@ -1,0 +1,635 @@
+{
+	"info": {
+		"_postman_id": "a_unique_id_will_be_generated_on_import",
+		"name": "Flashcards API Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"newuser\",\n    \"password\": \"securepassword\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"updateduser\",\n    \"password\": \"newsecurepassword\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Decks",
+			"item": [
+				{
+					"name": "Get All Decks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/decks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"decks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Deck by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/decks/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"decks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Deck",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"My New Deck\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/decks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"decks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Deck",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Deck Name\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/decks/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"decks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Deck",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/decks/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"decks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Flashcards",
+			"item": [
+				{
+					"name": "Get All Flashcards",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/flashcards",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"flashcards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Flashcard by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/flashcards/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"flashcards",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Flashcard",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"deckId\": 1, \n    \"prompt\": {\n        \"promptBody\": \"What is the capital of Germany?\",\n        \"hasSingleAnswer\": \"Y\",\n        \"answers\": [\n            {\n                \"answerBody\": \"Berlin\",\n                \"notes\": \"Correct answer\"\n            }\n        ]\n    }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/flashcards",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"flashcards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Flashcard",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"deckId\": 1, \n    \"prompt\": {\n        \"id\": 1, \n        \"promptBody\": \"What is the capital of France? (Updated)\",\n        \"hasSingleAnswer\": \"Y\",\n        \"answers\": [\n            {\n                \"id\": 1, \n                \"answerBody\": \"Paris (Updated)\",\n                \"notes\": \"Updated notes\"\n            }\n        ]\n    }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/flashcards/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"flashcards",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Flashcard",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/flashcards/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"flashcards",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Flashcards by Deck ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/flashcards/deck/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"flashcards",
+								"deck",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Flashcards by Has Many Correct Answers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/flashcards/hasManyCorrectAnswers/Y",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"hasManyCorrectAnswers",
+								"Y"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Prompts",
+			"item": [
+				{
+					"name": "Get All Prompts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/prompts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"prompts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Prompt by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/prompts/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"prompts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Prompt",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"promptBody\": \"What is the capital of Spain?\",\n    \"hasSingleAnswer\": \"Y\",\n    \"cardId\": 1, \n    \"answers\": [\n        {\n            \"answerBody\": \"Madrid\",\n            \"notes\": \"Correct answer\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/prompts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"prompts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Prompt",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"promptBody\": \"What is the capital of Spain? (Updated)\",\n    \"hasSingleAnswer\": \"Y\",\n    \"cardId\": 1, \n    \"answers\": [\n        {\n            \"id\": 1, \n            \"answerBody\": \"Madrid (Updated)\",\n            \"notes\": \"Updated notes\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/prompts/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"prompts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Prompt",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/prompts/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"prompts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Answers",
+			"item": [
+				{
+					"name": "Get All Answers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/answers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"answers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Answer by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/answers/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"answers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Answer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"promptId\": 1,\n    \"answerBody\": \"New Answer Text\",\n    \"notes\": \"Notes for new answer\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/answers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"answers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Answer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"promptId\": 1,\n    \"answerBody\": \"Updated Answer Text\",\n    \"notes\": \"Updated notes for answer\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/answers/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"answers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Answer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/answers/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"answers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

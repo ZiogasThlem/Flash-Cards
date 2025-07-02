@@ -25,7 +25,7 @@ public class User extends DbEntity {
     private String username;
 
     @Column(name = "password")
-    private transient String password;
+    private String password;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -18,12 +20,9 @@ public class Flashcard extends DbEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(name = "question")
-    private String question;
-
-    @NotBlank
-    private String answer;
+    @ManyToOne
+    @JoinColumn(name = "prompt_id")
+    private Prompt prompt;
 
     private YesNo hasManyCorrectAnswers;
 
@@ -39,12 +38,12 @@ public class Flashcard extends DbEntity {
 
     @Override
     public String getEntityTitle() {
-        return question;
+        return "Flashcard " + id;
     }
 
     @Override
     public String getSimpleLabel() {
-        return question;
+        return "Flashcard " + id;
     }
 
     @Override

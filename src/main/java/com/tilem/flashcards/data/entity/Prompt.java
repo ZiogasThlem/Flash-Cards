@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -25,13 +27,12 @@ public class Prompt extends DbEntity {
     @Column(name = "has_single_answer")
     private YesNo hasSingleAnswer;
 
-    @ManyToOne
-    @JoinColumn(name = "card_id")
-    private Flashcard card;
+    @OneToMany(mappedBy = "prompt", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Answer> answers;
 
     @Override
     public String getEntityTitle() {
-        return "Ερώτηση";
+        return promptBody;
     }
 
     @Override

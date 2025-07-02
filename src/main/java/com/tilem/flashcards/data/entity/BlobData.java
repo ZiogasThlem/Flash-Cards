@@ -21,6 +21,9 @@ public class BlobData extends DbEntity {
     @Column(name = "data", columnDefinition = "BYTEA")
     private byte[] data;
 
+    @Column(name = "mime_type")
+    private String mimeType;
+
     @Column(name = "notes")
     private String notes;
 

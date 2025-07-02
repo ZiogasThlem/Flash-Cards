@@ -10,7 +10,9 @@ import lombok.*;
 @ToString
 public class FlashcardDTO {
     public Long id;
-    public String question;
-    public String answer;
+    public PromptDTO prompt;
+    public String hasManyCorrectAnswers;
+    public String hasImageData;
+    public BlobDataDTO imageData;
     public Long deckId;
 }
