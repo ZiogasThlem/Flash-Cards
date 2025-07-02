@@ -29,6 +29,8 @@ public class Flashcard extends DbEntity {
 
     private YesNo hasImageData;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_data_id", referencedColumnName = "blob_id")
     private BlobData imageData;
 
     @ManyToOne

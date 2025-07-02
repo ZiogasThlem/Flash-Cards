@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Transient;
 
 import java.util.UUID;
 
+@SuppressWarnings("all")
 public abstract class DbEntity implements Comparable {
 
     @Transient

@@ -1,7 +1,7 @@
 package com.tilem.flashcards.data.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
@@ -11,13 +11,29 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "answers")
-public class Answer {
+public class Answer extends DbEntity {
 
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "prompt_id")
     private Prompt prompt;
 
-    private String body;
+    @NotBlank
+    @Column(name = "answer_body")
+    private String answerBody;
 
     private String notes;
+
+    @Override
+    public String getEntityTitle() {
+        return answerBody;
+    }
+
+    @Override
+    public Long getUniqueID() {
+        return id;
+    }
 }

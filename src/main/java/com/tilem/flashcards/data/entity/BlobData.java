@@ -10,17 +10,27 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "blob_data")
-public class BlobData {
+public class BlobData extends DbEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "blob_id")
-    private long blobId;
+    private Long id;
 
     @Lob
-    @Column(name = "blob_data", columnDefinition = "BYTEA")
-    private byte[] blobData;
+    @Column(name = "data", columnDefinition = "BYTEA")
+    private byte[] data;
 
     @Column(name = "notes")
     private String notes;
+
+    @Override
+    public String getEntityTitle() {
+        return notes;
+    }
+
+    @Override
+    public Long getUniqueID() {
+        return id;
+    }
 }
