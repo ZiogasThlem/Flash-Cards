@@ -25,6 +25,7 @@ public class Prompt extends DbEntity {
     private String promptBody;
 
     @Column(name = "has_single_answer")
+    @Enumerated(EnumType.STRING)
     private YesNo hasSingleAnswer;
 
     @OneToMany(mappedBy = "prompt", cascade = CascadeType.ALL, orphanRemoval = true)

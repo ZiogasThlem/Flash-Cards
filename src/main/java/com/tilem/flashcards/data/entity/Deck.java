@@ -28,6 +28,8 @@ public class Deck extends DbEntity {
 
     private String description;
 
+
+    @Enumerated(EnumType.STRING)
     private DeckCategory category;
 
     @ManyToMany(mappedBy = "decks")

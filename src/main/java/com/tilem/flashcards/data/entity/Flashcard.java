@@ -24,8 +24,10 @@ public class Flashcard extends DbEntity {
     @JoinColumn(name = "prompt_id")
     private Prompt prompt;
 
+    @Enumerated(EnumType.STRING)
     private YesNo hasManyCorrectAnswers;
 
+    @Enumerated(EnumType.STRING)
     private YesNo hasImageData;
 
     @OneToOne(cascade = CascadeType.ALL)

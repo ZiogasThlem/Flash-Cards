@@ -10,6 +10,7 @@ import com.tilem.flashcards.repository.UserRepository;
 import com.tilem.flashcards.service.LearningSessionService;
 import com.tilem.flashcards.util.LogWrapper;
 import com.tilem.flashcards.util.SM2Algorithm;
+import java.lang.invoke.MethodHandles;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +22,7 @@ public class LearningSessionServiceImpl extends GenericServiceImpl<LearningSessi
     private final LearningSessionRepository learningSessionRepository;
     private final UserRepository userRepository;
     private final FlashcardRepository flashcardRepository;
-    private final LogWrapper log = new LogWrapper(getClass());
+    private static final LogWrapper log = LogWrapper.getLogger(MethodHandles.lookup().lookupClass());
 
     public LearningSessionServiceImpl(LearningSessionRepository learningSessionRepository, UserRepository userRepository, FlashcardRepository flashcardRepository) {
         super(learningSessionRepository);
@@ -45,14 +46,14 @@ public class LearningSessionServiceImpl extends GenericServiceImpl<LearningSessi
 
     @Override
     protected LearningSession mapToEntity(LearningSessionDTO dto) {
-        log.info("Mapping LearningSessionDTO to entity for DTO ID: {}", dto.getId());
+        log.info("Mapping LearningSessionDTO to entity for DTO ID: " + dto.getId());
         User user;
         Flashcard flashcard;
         try {
             user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
             flashcard = flashcardRepository.findById(dto.getFlashcardId()).orElseThrow(() -> new RuntimeException("Flashcard not found"));
         } catch (RuntimeException e) {
-            log.error("Error finding user or flashcard for LearningSessionDTO ID: {}", dto.getId(), e);
+            log.error("Error finding user or flashcard for LearningSessionDTO ID: " + dto.getId(), e);
             throw e;
         }
 
@@ -65,36 +66,36 @@ public class LearningSessionServiceImpl extends GenericServiceImpl<LearningSessi
                 .interval(dto.getInterval())
                 .ease(dto.getEase())
                 .build();
-        log.info("Successfully mapped LearningSessionDTO to entity for DTO ID: {}", dto.getId());
+        log.info("Successfully mapped LearningSessionDTO to entity for DTO ID: " + dto.getId());
         return learningSession;
     }
 
     @Override
     protected void updateEntity(LearningSession entity, LearningSessionDTO dto) {
-        log.info("Updating LearningSession entity with ID: {}", entity.getId());
+        log.info("Updating LearningSession entity with ID: " + entity.getId());
         // For learning sessions, we primarily update based on the SM-2 algorithm, not direct DTO updates
         // This method might not be directly used for typical updates, but is required by GenericServiceImpl
         if (dto.getLastReviewedAt() != null) entity.setLastReviewedAt(dto.getLastReviewedAt());
         if (dto.getNextReviewAt() != null) entity.setNextReviewAt(dto.getNextReviewAt());
         if (dto.getInterval() != null) entity.setInterval(dto.getInterval());
         if (dto.getEase() != null) entity.setEase(dto.getEase());
-        log.info("Finished updating LearningSession entity with ID: {}", entity.getId());
+        log.info("Finished updating LearningSession entity with ID: " + entity.getId());
     }
 
     @Override
     @Transactional
     public LearningSessionDTO recordReview(Long userId, Long flashcardId, int quality) {
-        log.info("Recording review for user ID: {}, flashcard ID: {}, quality: {}", userId, flashcardId, quality);
+        log.info("Recording review for user ID: " + userId + ", flashcard ID: " + flashcardId + ", quality: " + quality);
         LearningSession learningSession = learningSessionRepository.findByUserIdAndFlashcardId(userId, flashcardId)
                 .orElseGet(() -> {
-                    log.info("No existing learning session found. Creating new session for user ID: {}, flashcard ID: {}", userId, flashcardId);
+                    log.info("No existing learning session found. Creating new session for user ID: " + userId + ", flashcard ID: " + flashcardId);
                     User user;
                     Flashcard flashcard;
                     try {
                         user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
                         flashcard = flashcardRepository.findById(flashcardId).orElseThrow(() -> new RuntimeException("Flashcard not found"));
                     } catch (RuntimeException e) {
-                        log.error("Error finding user or flashcard when creating new learning session for user ID: {}, flashcard ID: {}", userId, flashcardId, e);
+                        log.error("Error finding user or flashcard when creating new learning session for user ID: " + userId + ", flashcard ID: " + flashcardId, e);
                         throw e;
                     }
                     return LearningSession.builder()
@@ -120,7 +121,7 @@ public class LearningSessionServiceImpl extends GenericServiceImpl<LearningSessi
         learningSession.setRepetitions(srsData.getRepetitions());
 
         LearningSession savedSession = learningSessionRepository.save(learningSession);
-        log.info("Review recorded and session updated for user ID: {}, flashcard ID: {}. Next review: {}", userId, flashcardId, savedSession.getNextReviewAt());
+        log.info("Review recorded and session updated for user ID: " + userId + ", flashcard ID: " + flashcardId + ". Next review: " + savedSession.getNextReviewAt());
         return mapToDto(savedSession);
     }
 }
