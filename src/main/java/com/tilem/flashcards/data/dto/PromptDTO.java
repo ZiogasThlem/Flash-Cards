@@ -1,5 +1,6 @@
 package com.tilem.flashcards.data.dto;
 
+import com.tilem.flashcards.data.enums.YesNo;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,6 +11,6 @@ import java.util.List;
 public class PromptDTO {
     private Long id;
     private String promptBody;
-    private String hasSingleAnswer;
+    private YesNo hasSingleAnswer;
     private List<AnswerDTO> answers;
 }

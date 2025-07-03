@@ -1,5 +1,8 @@
 package com.tilem.flashcards.data.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.tilem.flashcards.data.enums.YesNo;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -8,11 +11,17 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FlashcardDTO {
-    public Long id;
-    public PromptDTO prompt;
-    public String hasManyCorrectAnswers;
-    public String hasImageData;
-    public BlobDataDTO imageData;
-    public Long deckId;
+
+    private Long id;
+
+    @NotNull(message = "Deck ID is mandatory")
+    private Long deckId;
+
+    private PromptDTO prompt;
+    private YesNo hasManyCorrectAnswers;
+    private YesNo hasImageData;
+    private BlobDataDTO imageData;
+
 }

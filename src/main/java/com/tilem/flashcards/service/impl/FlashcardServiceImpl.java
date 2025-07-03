@@ -66,7 +66,7 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
             promptDTO = PromptDTO.builder()
                     .id(prompt.getId())
                     .promptBody(prompt.getPromptBody())
-                    .hasSingleAnswer(prompt.getHasSingleAnswer().getDbValue())
+                    .hasSingleAnswer(prompt.getHasSingleAnswer())
                     .answers(answerDTOs)
                     .build();
         }
@@ -83,8 +83,8 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
         return FlashcardDTO.builder()
                 .id(entity.getId())
                 .prompt(promptDTO)
-                .hasManyCorrectAnswers(entity.getHasManyCorrectAnswers().getDbValue())
-                .hasImageData(entity.getHasImageData().getDbValue())
+                .hasManyCorrectAnswers(entity.getHasManyCorrectAnswers())
+                .hasImageData(entity.getHasImageData())
                 .imageData(blobDataDTO)
                 .deckId(entity.getDeck().getId())
                 .build();
@@ -95,8 +95,8 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
         Deck deck = deckRepository.findById(dto.getDeckId()).orElseThrow();
         Flashcard flashcard = new Flashcard();
         flashcard.setDeck(deck);
-        flashcard.setHasManyCorrectAnswers(YesNo.getTypeFromString(dto.getHasManyCorrectAnswers()));
-        flashcard.setHasImageData(YesNo.getTypeFromString(dto.getHasImageData()));
+        flashcard.setHasManyCorrectAnswers(dto.getHasManyCorrectAnswers());
+        flashcard.setHasImageData(dto.getHasImageData());
 
         if (dto.getPrompt() != null) {
             Prompt prompt;
@@ -127,8 +127,8 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
 
     @Override
     protected void updateEntity(Flashcard entity, FlashcardDTO dto) {
-        entity.setHasManyCorrectAnswers(YesNo.getTypeFromString(dto.getHasManyCorrectAnswers()));
-        entity.setHasImageData(YesNo.getTypeFromString(dto.getHasImageData()));
+        entity.setHasManyCorrectAnswers(dto.getHasManyCorrectAnswers());
+        entity.setHasImageData(dto.getHasImageData());
 
         if (dto.getPrompt() != null) {
             if (entity.getPrompt() == null) {
@@ -165,3 +165,4 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
         }
     }
 }
+

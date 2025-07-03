@@ -1,6 +1,7 @@
 package com.tilem.flashcards.controller;
 
 import com.tilem.flashcards.service.GenericService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,27 +15,28 @@ public abstract class GenericController<T, U> {
     }
 
     @GetMapping
-    public List<U> getAll() {
-        return service.findAll();
+    public ResponseEntity<List<U>> getAll() {
+        return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public U getOne(@PathVariable Long id) {
-        return service.findById(id);
+    public ResponseEntity<U> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
-    public U create(@RequestBody U dto) {
-        return service.create(dto);
+    public ResponseEntity<U> create(@RequestBody U dto) {
+        return ResponseEntity.ok(service.create(dto));
     }
 
     @PutMapping("/{id}")
-    public U update(@PathVariable Long id, @RequestBody U dto) {
-        return service.update(id, dto);
+    public ResponseEntity<U> update(@PathVariable Long id, @RequestBody U dto) {
+        return ResponseEntity.ok(service.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

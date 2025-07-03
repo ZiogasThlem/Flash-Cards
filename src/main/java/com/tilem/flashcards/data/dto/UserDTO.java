@@ -1,20 +1,27 @@
 package com.tilem.flashcards.data.dto;
 
-import lombok.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
-    public Long id;
-    public String username;
-    @JsonIgnore
-    public String password;
-    public List<Long> deckIds;
+
+    private Long id;
+
+    @NotBlank(message = "Username is mandatory")
+    private String username;
+
+    @NotBlank(message = "Password is mandatory")
+    private String password;
+
+    private List<Long> deckIds;
+
 }

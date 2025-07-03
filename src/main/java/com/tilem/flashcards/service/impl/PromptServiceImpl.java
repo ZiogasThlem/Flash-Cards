@@ -38,7 +38,7 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO> imp
         return PromptDTO.builder()
                 .id(entity.getId())
                 .promptBody(entity.getPromptBody())
-                .hasSingleAnswer(entity.getHasSingleAnswer().getDbValue())
+                .hasSingleAnswer(entity.getHasSingleAnswer())
                 .answers(answerDTOs)
                 .build();
     }
@@ -47,7 +47,7 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO> imp
     public Prompt mapToEntity(PromptDTO dto) {
         Prompt prompt = new Prompt();
         prompt.setPromptBody(dto.getPromptBody());
-        prompt.setHasSingleAnswer(YesNo.getTypeFromString(dto.getHasSingleAnswer()));
+        prompt.setHasSingleAnswer(dto.getHasSingleAnswer());
         if (dto.getAnswers() != null) {
             List<Answer> answers = dto.getAnswers().stream()
                     .map(answerDTO -> answerService.mapToEntity(answerDTO))
@@ -61,7 +61,7 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO> imp
     @Override
     public void updateEntity(Prompt entity, PromptDTO dto) {
         entity.setPromptBody(dto.getPromptBody());
-        entity.setHasSingleAnswer(YesNo.getTypeFromString(dto.getHasSingleAnswer()));
+        entity.setHasSingleAnswer(dto.getHasSingleAnswer());
 
         // Update answers
         if (dto.getAnswers() != null) {

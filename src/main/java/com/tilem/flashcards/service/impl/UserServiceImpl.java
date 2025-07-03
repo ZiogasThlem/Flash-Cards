@@ -4,8 +4,12 @@ import com.tilem.flashcards.data.dto.UserDTO;
 import com.tilem.flashcards.data.entity.User;
 import com.tilem.flashcards.repository.UserRepository;
 import com.tilem.flashcards.service.UserService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class UserServiceImpl extends GenericServiceImpl<User, UserDTO> implements UserService {
@@ -43,5 +47,12 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDTO> implement
         if (dto.getUsername() != null && !dto.getUsername().isBlank()) {
             entity.setUsername(dto.getUsername());
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = ((UserRepository) repository).findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 }

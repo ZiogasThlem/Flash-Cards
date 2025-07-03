@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public abstract class GenericServiceImpl<T extends DbEntity, U> implements GenericService<T, U> {
 
-    private final GenericRepository<T> repository;
+    protected final GenericRepository<T> repository;
 
     public GenericServiceImpl(GenericRepository<T> repository) {
         this.repository = repository;
