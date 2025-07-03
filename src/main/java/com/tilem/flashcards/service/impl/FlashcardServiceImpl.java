@@ -99,16 +99,16 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
         flashcard.setHasImageData(dto.getHasImageData());
 
         if (dto.getPrompt() != null) {
-            Prompt prompt;
+            Prompt promptToSet;
             if (dto.getPrompt().getId() == null) {
                 // New prompt
-                prompt = promptService.mapToEntity(dto.getPrompt());
+                promptToSet = promptService.mapToEntity(dto.getPrompt());
             } else {
                 // Existing prompt
-                prompt = promptService.mapToEntity(promptService.findById(dto.getPrompt().getId()));
-                promptService.updateEntity(prompt, dto.getPrompt());
+                promptToSet = (Prompt) promptService.findById(dto.getPrompt().getId());
+                promptService.updateEntity(promptToSet, dto.getPrompt());
             }
-            flashcard.setPrompt(prompt);
+            flashcard.setPrompt(promptToSet);
         } else {
             flashcard.setPrompt(null);
         }

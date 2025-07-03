@@ -13,4 +13,14 @@ public class AnswerController extends GenericController<Answer, AnswerDTO> {
     public AnswerController(AnswerService answerService) {
         super(answerService);
     }
+
+    @Override
+    protected AnswerDTO mapToDto(Answer entity) {
+        return AnswerDTO.builder()
+                .id(entity.getId())
+                .promptId(entity.getPrompt().getId())
+                .answerBody(entity.getAnswerBody())
+                .notes(entity.getNotes())
+                .build();
+    }
 }

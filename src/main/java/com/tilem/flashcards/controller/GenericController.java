@@ -21,8 +21,11 @@ public abstract class GenericController<T, U> {
 
     @GetMapping("/{id}")
     public ResponseEntity<U> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.findById(id));
+        T entity = service.findById(id);
+        return ResponseEntity.ok(mapToDto(entity));
     }
+
+    protected abstract U mapToDto(T entity);
 
     @PostMapping
     public ResponseEntity<U> create(@RequestBody U dto) {

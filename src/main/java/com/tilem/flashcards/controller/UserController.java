@@ -40,4 +40,12 @@ public class UserController extends GenericController<User, UserDTO> {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         return super.delete(id);
     }
+
+    @Override
+    protected UserDTO mapToDto(User entity) {
+        return UserDTO.builder()
+                .id(entity.getId())
+                .username(entity.getUsername())
+                .build();
+    }
 }

@@ -2,9 +2,14 @@ package com.tilem.flashcards.controller;
 
 import com.tilem.flashcards.data.dto.DeckDTO;
 import com.tilem.flashcards.data.entity.Deck;
+import com.tilem.flashcards.data.entity.Flashcard;
+import com.tilem.flashcards.data.entity.User;
 import com.tilem.flashcards.service.DeckService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import java.util.List;
 
@@ -42,5 +47,15 @@ public class DeckController extends GenericController<Deck, DeckDTO> {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         return super.delete(id);
+    }
+
+    @Override
+    protected DeckDTO mapToDto(Deck entity) {
+        return DeckDTO.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .users(entity.getUsers().stream().map(User::getDetailedLabel).collect(Collectors.toList()))
+                .flashcards(entity.getFlashcards().stream().map(Flashcard::getSimpleLabel).collect(Collectors.toList()))
+                .build();
     }
 }

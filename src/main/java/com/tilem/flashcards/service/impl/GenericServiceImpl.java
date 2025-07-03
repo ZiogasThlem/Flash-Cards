@@ -24,8 +24,8 @@ public abstract class GenericServiceImpl<T extends DbEntity, U> implements Gener
 
     @Override
     @Transactional(readOnly = true)
-    public U findById(Long id) {
-        return mapToDto(repository.findById(id).orElseThrow());
+    public T findById(Long id) {
+        return repository.findById(id).orElseThrow();
     }
 
     @Override
