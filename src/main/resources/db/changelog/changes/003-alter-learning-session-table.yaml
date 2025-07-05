@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: gemini
+      changes:
+        - addColumn:
+            tableName: learning_session
+            columns:
+              - column:
+                  name: flashcard_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_learning_session_flashcard
+                    references: flashcards(id)
+                    nullable: false
+              - column:
+                  name: last_reviewed_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: next_review_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+        - dropColumn:
+            tableName: learning_session
+            columns:
+              - column:
+                  name: created_at
+              - column:
+                  name: updated_at

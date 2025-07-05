@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: gemini
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: "1"
+              - column:
+                  name: username
+                  value: "testuser"
+              - column:
+                  name: password
+                  value: "$2a$10$..H/IepmsM6Cg3O6/G.iP.g.N.dG/b.9U.wJ.Y.X.Q.qZ.5a.b.c.d"
+        - insert:
+            tableName: decks
+            columns:
+              - column:
+                  name: id
+                  value: "1"
+              - column:
+                  name: name
+                  value: "French Vocabulary"
+              - column:
+                  name: description
+                  value: "Basic French words and phrases"
+              - column:
+                  name: category
+                  value: "LANGUAGE"
+        - insert:
+            tableName: users_decks
+            columns:
+              - column:
+                  name: user_id
+                  value: "1"
+              - column:
+                  name: deck_id
+                  value: "1"
+        - insert:
+            tableName: prompts
+            columns:
+              - column:
+                  name: id
+                  value: "1"
+              - column:
+                  name: prompt_body
+                  value: "What is the French word for 'hello'?"
+              - column:
+                  name: has_single_answer
+                  value: "Y"
+        - insert:
+            tableName: flashcards
+            columns:
+              - column:
+                  name: id
+                  value: "1"
+              - column:
+                  name: prompt_id
+                  value: "1"
+              - column:
+                  name: deck_id
+                  value: "1"
+              - column:
+                  name: has_many_correct_answers
+                  value: "N"
+              - column:
+                  name: has_image_data
+                  value: "N"
