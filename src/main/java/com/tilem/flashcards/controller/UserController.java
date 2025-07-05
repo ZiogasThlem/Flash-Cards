@@ -3,6 +3,7 @@ package com.tilem.flashcards.controller;
 import com.tilem.flashcards.data.dto.UserDTO;
 import com.tilem.flashcards.data.entity.User;
 import com.tilem.flashcards.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +13,8 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController extends GenericController<User, UserDTO> {
 
-    public UserController(UserService userService) {
-        super(userService);
-    }
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAll() {

@@ -1,5 +1,6 @@
 package com.tilem.flashcards.data.entity;
 
+import com.tilem.flashcards.data.enums.YesNo;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "learning_sessions")
+@Table(name = "learning_session")
 public class LearningSession extends DbEntity {
 
     @Id
@@ -32,14 +33,9 @@ public class LearningSession extends DbEntity {
     @Column(name = "next_review_at", nullable = false)
     private LocalDateTime nextReviewAt;
 
-    @Column(nullable = false)
-    private Integer interval;
-
-    @Column(nullable = false)
-    private Double ease;
-
-    @Column(nullable = false)
-    private Integer repetitions;
+    @Column(name = "is_active")
+    @Enumerated(EnumType.STRING)
+    private YesNo isActive;
 
     @Override
     public String getEntityTitle() {

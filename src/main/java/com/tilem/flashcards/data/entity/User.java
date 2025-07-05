@@ -48,11 +48,17 @@ public class User extends DbEntity {
 
     @Override
     public String getEntityTitle() {
-        return username;
+        return "Χρήστης";
     }
 
     @Override
     public Long getUniqueID() {
         return id;
     }
+
+    @Override
+    public  String getSimpleLabel() {
+        return username;
+    }
+
 }

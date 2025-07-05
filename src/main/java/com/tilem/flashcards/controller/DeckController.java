@@ -5,24 +5,21 @@ import com.tilem.flashcards.data.entity.Deck;
 import com.tilem.flashcards.data.entity.Flashcard;
 import com.tilem.flashcards.data.entity.User;
 import com.tilem.flashcards.service.DeckService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/decks")
 public class DeckController extends GenericController<Deck, DeckDTO> {
 
-    private final DeckService deckService;
-
-    public DeckController(DeckService deckService) {
-        super(deckService);
-        this.deckService = deckService;
-    }
+    @Autowired
+    private DeckService deckService;
 
     @GetMapping
     public ResponseEntity<List<DeckDTO>> getAll() {
@@ -49,12 +46,18 @@ public class DeckController extends GenericController<Deck, DeckDTO> {
         return super.delete(id);
     }
 
+    @PostMapping("/import")
+    public ResponseEntity<List<DeckDTO>> importDecks(@RequestParam("file") MultipartFile file) throws IOException {
+        List<DeckDTO> importedDecks = deckService.importDecksFromFile(new String(file.getBytes()));
+        return ResponseEntity.ok(importedDecks);
+    }
+
     @Override
     protected DeckDTO mapToDto(Deck entity) {
         return DeckDTO.builder()
                 .id(entity.getId())
                 .name(entity.getName())
-                .users(entity.getUsers().stream().map(User::getDetailedLabel).collect(Collectors.toList()))
+                .users(entity.getUsers().stream().map(User::getSimpleLabel).collect(Collectors.toList()))
                 .flashcards(entity.getFlashcards().stream().map(Flashcard::getSimpleLabel).collect(Collectors.toList()))
                 .build();
     }

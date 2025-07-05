@@ -78,7 +78,6 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO> imp
         entity.setPromptBody(dto.getPromptBody());
         entity.setHasSingleAnswer(dto.getHasSingleAnswer());
 
-        // Update answers
         if (dto.getAnswers() != null) {
             List<Answer> existingAnswers = new ArrayList<>(entity.getAnswers());
             List<Answer> updatedAnswers = new ArrayList<>();
@@ -86,7 +85,6 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO> imp
             for (AnswerDTO answerDTO : dto.getAnswers()) {
                 try {
                     if (answerDTO.getId() != null) {
-                        // Existing answer, update it
                         existingAnswers.stream()
                                 .filter(a -> a.getId().equals(answerDTO.getId()))
                                 .findFirst()
@@ -95,7 +93,6 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO> imp
                                     updatedAnswers.add(answer);
                                 });
                     } else {
-                        // New answer, create it
                         Answer newAnswer = answerService.mapToEntity(answerDTO);
                         newAnswer.setPrompt(entity);
                         updatedAnswers.add(newAnswer);
@@ -106,9 +103,7 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO> imp
                 }
             }
 
-            // Remove answers not present in the DTO
             entity.getAnswers().retainAll(updatedAnswers);
-            // Add new answers
             updatedAnswers.stream()
                     .filter(answer -> !entity.getAnswers().contains(answer))
                     .forEach(entity.getAnswers()::add);

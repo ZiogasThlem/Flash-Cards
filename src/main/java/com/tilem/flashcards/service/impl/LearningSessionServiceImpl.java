@@ -4,12 +4,12 @@ import com.tilem.flashcards.data.dto.LearningSessionDTO;
 import com.tilem.flashcards.data.entity.Flashcard;
 import com.tilem.flashcards.data.entity.LearningSession;
 import com.tilem.flashcards.data.entity.User;
+import com.tilem.flashcards.data.enums.YesNo;
 import com.tilem.flashcards.repository.FlashcardRepository;
 import com.tilem.flashcards.repository.LearningSessionRepository;
 import com.tilem.flashcards.repository.UserRepository;
 import com.tilem.flashcards.service.LearningSessionService;
 import com.tilem.flashcards.util.LogWrapper;
-import com.tilem.flashcards.util.SM2Algorithm;
 import java.lang.invoke.MethodHandles;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,8 +39,7 @@ public class LearningSessionServiceImpl extends GenericServiceImpl<LearningSessi
                 .flashcardId(entity.getFlashcard().getId())
                 .lastReviewedAt(entity.getLastReviewedAt())
                 .nextReviewAt(entity.getNextReviewAt())
-                .interval(entity.getInterval())
-                .ease(entity.getEase())
+                .isActive(entity.getIsActive().name())
                 .build();
     }
 
@@ -63,8 +62,7 @@ public class LearningSessionServiceImpl extends GenericServiceImpl<LearningSessi
                 .flashcard(flashcard)
                 .lastReviewedAt(dto.getLastReviewedAt())
                 .nextReviewAt(dto.getNextReviewAt())
-                .interval(dto.getInterval())
-                .ease(dto.getEase())
+                .isActive(YesNo.valueOf(dto.getIsActive()))
                 .build();
         log.info("Successfully mapped LearningSessionDTO to entity for DTO ID: " + dto.getId());
         return learningSession;
@@ -73,19 +71,16 @@ public class LearningSessionServiceImpl extends GenericServiceImpl<LearningSessi
     @Override
     protected void updateEntity(LearningSession entity, LearningSessionDTO dto) {
         log.info("Updating LearningSession entity with ID: " + entity.getId());
-        // For learning sessions, we primarily update based on the SM-2 algorithm, not direct DTO updates
-        // This method might not be directly used for typical updates, but is required by GenericServiceImpl
         if (dto.getLastReviewedAt() != null) entity.setLastReviewedAt(dto.getLastReviewedAt());
         if (dto.getNextReviewAt() != null) entity.setNextReviewAt(dto.getNextReviewAt());
-        if (dto.getInterval() != null) entity.setInterval(dto.getInterval());
-        if (dto.getEase() != null) entity.setEase(dto.getEase());
+        if (dto.getIsActive() != null) entity.setIsActive(YesNo.valueOf(dto.getIsActive()));
         log.info("Finished updating LearningSession entity with ID: " + entity.getId());
     }
 
     @Override
     @Transactional
-    public LearningSessionDTO recordReview(Long userId, Long flashcardId, int quality) {
-        log.info("Recording review for user ID: " + userId + ", flashcard ID: " + flashcardId + ", quality: " + quality);
+    public LearningSessionDTO recordReview(Long userId, Long flashcardId) {
+        log.info("Recording review for user ID: " + userId + ", flashcard ID: " + flashcardId);
         LearningSession learningSession = learningSessionRepository.findByUserIdAndFlashcardId(userId, flashcardId)
                 .orElseGet(() -> {
                     log.info("No existing learning session found. Creating new session for user ID: " + userId + ", flashcard ID: " + flashcardId);
@@ -101,24 +96,13 @@ public class LearningSessionServiceImpl extends GenericServiceImpl<LearningSessi
                     return LearningSession.builder()
                             .user(user)
                             .flashcard(flashcard)
-                            .interval(0) // Initial interval
-                            .ease(2.5) // Initial ease factor
-                            .repetitions(0) // Initial repetitions
+                            .isActive(YesNo.Y)
                             .build();
                 });
 
-        SM2Algorithm.LearningSessionData srsData = SM2Algorithm.calculateNextReview(
-                quality,
-                learningSession.getRepetitions(),
-                learningSession.getEase(),
-                learningSession.getInterval()
-        );
-
         learningSession.setLastReviewedAt(LocalDateTime.now());
-        learningSession.setNextReviewAt(srsData.getNextReviewDate());
-        learningSession.setInterval(srsData.getInterval());
-        learningSession.setEase(srsData.getEaseFactor());
-        learningSession.setRepetitions(srsData.getRepetitions());
+        learningSession.setNextReviewAt(LocalDateTime.now().plusDays(1)); // Example: next review in 1 day
+        learningSession.setIsActive(YesNo.Y);
 
         LearningSession savedSession = learningSessionRepository.save(learningSession);
         log.info("Review recorded and session updated for user ID: " + userId + ", flashcard ID: " + flashcardId + ". Next review: " + savedSession.getNextReviewAt());

@@ -61,7 +61,7 @@ class DeckServiceImplTest {
         testDeckDTO = DeckDTO.builder()
                 .id(1L)
                 .name("Test Deck")
-                .users(Arrays.asList("10 - 10", "20 - 20"))
+                .users(Arrays.asList("10 - user1", "20 - user2"))
                 .flashcards(Arrays.asList("Flashcard 100", "Flashcard 200"))
                 .build();
     }

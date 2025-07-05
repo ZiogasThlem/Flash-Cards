@@ -5,6 +5,7 @@ import com.tilem.flashcards.data.entity.Prompt;
 import com.tilem.flashcards.data.dto.AnswerDTO;
 import com.tilem.flashcards.data.entity.Answer;
 import com.tilem.flashcards.service.PromptService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,9 +16,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/prompts")
 public class PromptController extends GenericController<Prompt, PromptDTO> {
 
-    public PromptController(PromptService promptService) {
-        super(promptService);
-    }
+    @Autowired
+    private PromptService promptService;
 
     @Override
     protected PromptDTO mapToDto(Prompt entity) {

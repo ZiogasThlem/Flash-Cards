@@ -1,5 +1,8 @@
 package com.tilem.flashcards.service.impl;
 
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvException;
 import com.tilem.flashcards.data.dto.AnswerDTO;
 import com.tilem.flashcards.data.dto.BlobDataDTO;
 import com.tilem.flashcards.data.dto.FlashcardDTO;
@@ -15,10 +18,15 @@ import com.tilem.flashcards.repository.FlashcardRepository;
 import com.tilem.flashcards.service.FlashcardService;
 import com.tilem.flashcards.service.LearningSessionService;
 import com.tilem.flashcards.service.PromptService;
+import com.tilem.flashcards.util.AppException;
 import com.tilem.flashcards.util.LogWrapper;
-import java.lang.invoke.MethodHandles;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,8 +40,11 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
     private final LearningSessionService learningSessionService;
     private static final LogWrapper log = LogWrapper.getLogger(MethodHandles.lookup().lookupClass());
 
-    public FlashcardServiceImpl(FlashcardRepository flashcardRepository, DeckRepository deckRepository,
-                                PromptService promptService, BlobDataRepository blobDataRepository, LearningSessionService learningSessionService) {
+    public FlashcardServiceImpl(FlashcardRepository flashcardRepository,
+                                DeckRepository deckRepository,
+                                PromptService promptService,
+                                BlobDataRepository blobDataRepository,
+                                LearningSessionService learningSessionService) {
         super(flashcardRepository);
         this.flashcardRepository = flashcardRepository;
         this.deckRepository = deckRepository;
@@ -59,9 +70,9 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
     }
 
     @Override
-    public void recordFlashcardReview(Long flashcardId, Long userId, int quality) {
-        log.info("Recording review for flashcard ID: " + flashcardId + ", user ID: " + userId + ", quality: " + quality);
-        learningSessionService.recordReview(userId, flashcardId, quality);
+    public void recordFlashcardReview(Long flashcardId, Long userId) {
+        log.info("Recording review for flashcard ID: " + flashcardId + ", user ID: " + userId);
+        learningSessionService.recordReview(userId, flashcardId);
         log.info("Review recorded for flashcard ID: " + flashcardId);
     }
 
@@ -121,6 +132,9 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
         flashcard.setHasImageData(dto.getHasImageData());
 
         if (dto.getPrompt() != null) {
+            if (dto.getPrompt().getAnswers() == null || dto.getPrompt().getAnswers().isEmpty()) {
+                throw new AppException("Flashcard prompt must have at least one answer.");
+            }
             Prompt promptToSet;
             if (dto.getPrompt().getId() == null) {
                 log.info("Mapping new prompt for flashcard DTO ID: " + dto.getId());
@@ -185,20 +199,17 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
 
         if (dto.getImageData() != null) {
             if (entity.getImageData() == null) {
-                // New image data
                 log.info("Assigning new image data to flashcard ID: " + entity.getId());
                 BlobData blobData = new BlobData();
                 blobData.setData(dto.getImageData().getData());
                 blobData.setMimeType(dto.getImageData().getMimeType());
                 entity.setImageData(blobData);
             } else {
-                // Update existing image data
                 log.info("Updating existing image data for flashcard ID: " + entity.getId());
                 entity.getImageData().setData(dto.getImageData().getData());
                 entity.getImageData().setMimeType(dto.getImageData().getMimeType());
             }
         } else {
-            // Remove image data
             if (entity.getImageData() != null) {
                 log.info("Removing image data for flashcard ID: " + entity.getId());
                 try {
@@ -211,6 +222,43 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
             }
         }
         log.info("Successfully updated flashcard entity with ID: " + entity.getId());
+    }
+
+    @Override
+    @Transactional
+    public List<FlashcardDTO> importFlashcardsFromFile(String fileContent) {
+        List<FlashcardDTO> importedFlashcards = new ArrayList<>();
+        try (CSVReader reader = new CSVReaderBuilder(new StringReader(fileContent)).build()) {
+            List<String[]> records = reader.readAll();
+            for (String[] record : records) {
+                if (record.length > 0) {
+                    String promptBody = record[0];
+                    PromptDTO promptDTO = PromptDTO.builder()
+                            .promptBody(promptBody)
+                            .hasSingleAnswer(YesNo.Y)
+                            .answers(new ArrayList<>())
+                            .build();
+
+                    for (int i = 1; i < record.length; i++) {
+                        AnswerDTO answerDTO = AnswerDTO.builder()
+                                .answerBody(record[i])
+                                .build();
+                        promptDTO.getAnswers().add(answerDTO);
+                    }
+
+                    FlashcardDTO flashcardDTO = FlashcardDTO.builder()
+                            .prompt(promptDTO)
+                            .hasManyCorrectAnswers(promptDTO.getAnswers().size() > 1 ? YesNo.Y : YesNo.N)
+                            .hasImageData(YesNo.N)
+                            .build();
+                    importedFlashcards.add(create(flashcardDTO));
+                }
+            }
+        } catch (IOException | CsvException e) {
+            log.error("Error processing CSV file for flashcards: " + e.getMessage());
+            throw new AppException("Error reading CSV file for flashcards import.", e);
+        }
+        return importedFlashcards;
     }
 }
 

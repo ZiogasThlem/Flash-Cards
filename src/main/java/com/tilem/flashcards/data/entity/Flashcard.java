@@ -40,7 +40,7 @@ public class Flashcard extends DbEntity {
 
     @Override
     public String getEntityTitle() {
-        return "Flashcard " + id;
+        return "Flashcard";
     }
 
     @Override

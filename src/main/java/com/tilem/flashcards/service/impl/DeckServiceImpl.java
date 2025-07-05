@@ -1,14 +1,24 @@
 package com.tilem.flashcards.service.impl;
 
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvException;
 import com.tilem.flashcards.data.dto.DeckDTO;
 import com.tilem.flashcards.data.entity.Deck;
 import com.tilem.flashcards.data.entity.Flashcard;
 import com.tilem.flashcards.data.entity.User;
 import com.tilem.flashcards.repository.DeckRepository;
 import com.tilem.flashcards.service.DeckService;
+import com.tilem.flashcards.util.AppException;
 import com.tilem.flashcards.util.LogWrapper;
+import java.io.IOException;
+import java.io.StringReader;
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,4 +58,26 @@ public class DeckServiceImpl extends GenericServiceImpl<Deck, DeckDTO> implement
         entity.setName(dto.getName());
         log.info("Successfully updated Deck entity with ID: " + entity.getId());
     }
+
+    @Override
+    @Transactional
+    public List<DeckDTO> importDecksFromFile(String fileContent) {
+        List<DeckDTO> importedDecks = new ArrayList<>();
+        try (CSVReader reader = new CSVReaderBuilder(new StringReader(fileContent)).build()) {
+            List<String[]> records = reader.readAll();
+            for (String[] record : records) {
+                if (record.length > 0) {
+                    DeckDTO deckDTO = DeckDTO.builder()
+                            .name(record[0])
+                            .build();
+                    importedDecks.add(create(deckDTO));
+                }
+            }
+        } catch (IOException | CsvException e) {
+            log.error("Error processing CSV file for decks: " + e.getMessage());
+            throw new AppException("Error reading CSV file for decks import.", e);
+        }
+        return importedDecks;
+    }
 }
+

@@ -8,24 +8,21 @@ import com.tilem.flashcards.data.dto.BlobDataDTO;
 import com.tilem.flashcards.data.dto.PromptDTO;
 import com.tilem.flashcards.data.entity.Prompt;
 import com.tilem.flashcards.service.FlashcardService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/flashcards")
 public class FlashcardController extends GenericController<Flashcard, FlashcardDTO> {
 
-    private final FlashcardService flashcardService;
-
-    public FlashcardController(FlashcardService flashcardService) {
-        super(flashcardService);
-        this.flashcardService = flashcardService;
-    }
+    @Autowired
+    private FlashcardService flashcardService;
 
     @GetMapping
     public ResponseEntity<List<FlashcardDTO>> getAll() {
@@ -60,6 +57,12 @@ public class FlashcardController extends GenericController<Flashcard, FlashcardD
     @GetMapping("/hasManyCorrectAnswers/{hasManyCorrectAnswers}")
     public List<FlashcardDTO> getByHasManyCorrectAnswers(@PathVariable YesNo hasManyCorrectAnswers) {
         return flashcardService.getFlashcardsByHasManyCorrectAnswers(hasManyCorrectAnswers);
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<List<FlashcardDTO>> importFlashcards(@RequestParam("file") MultipartFile file) throws IOException {
+        List<FlashcardDTO> importedFlashcards = flashcardService.importFlashcardsFromFile(new String(file.getBytes()));
+        return ResponseEntity.ok(importedFlashcards);
     }
 
     @Override

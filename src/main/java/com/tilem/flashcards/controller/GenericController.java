@@ -1,6 +1,8 @@
 package com.tilem.flashcards.controller;
 
+
 import com.tilem.flashcards.service.GenericService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,16 +10,14 @@ import java.util.List;
 
 public abstract class GenericController<T, U> {
 
-    private final GenericService<T, U> service;
-
-    public GenericController(GenericService<T, U> service) {
-        this.service = service;
-    }
+    @Autowired
+    protected GenericService<T, U> service;
 
     @GetMapping
     public ResponseEntity<List<U>> getAll() {
         return ResponseEntity.ok(service.findAll());
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<U> getById(@PathVariable Long id) {
