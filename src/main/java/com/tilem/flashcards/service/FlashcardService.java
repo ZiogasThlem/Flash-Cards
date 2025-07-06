@@ -5,11 +5,9 @@ import com.tilem.flashcards.data.entity.Flashcard;
 
 import java.util.List;
 
-import com.tilem.flashcards.data.enums.YesNo;
-
 public interface FlashcardService extends GenericService<Flashcard, FlashcardDTO> {
     List<FlashcardDTO> getFlashcardsByDeck(Long deckId);
-    List<FlashcardDTO> getFlashcardsByHasManyCorrectAnswers(YesNo hasManyCorrectAnswers);
+    
     void recordFlashcardReview(Long flashcardId, Long userId);
     List<FlashcardDTO> importFlashcardsFromFile(String fileContent);
 }

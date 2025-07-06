@@ -20,8 +20,6 @@ public class FlashcardDTO {
     private Long deckId;
 
     private PromptDTO prompt;
-    private YesNo hasManyCorrectAnswers;
     private YesNo hasImageData;
-    private BlobDataDTO imageData;
 
 }

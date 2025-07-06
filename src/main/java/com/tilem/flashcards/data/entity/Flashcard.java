@@ -2,10 +2,7 @@ package com.tilem.flashcards.data.entity;
 
 import com.tilem.flashcards.data.enums.YesNo;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -25,14 +22,7 @@ public class Flashcard extends DbEntity {
     private Prompt prompt;
 
     @Enumerated(EnumType.STRING)
-    private YesNo hasManyCorrectAnswers;
-
-    @Enumerated(EnumType.STRING)
     private YesNo hasImageData;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_data_id", referencedColumnName = "blob_id")
-    private BlobData imageData;
 
     @ManyToOne
     @JoinColumn(name = "deck_id")

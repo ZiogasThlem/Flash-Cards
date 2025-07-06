@@ -1,11 +1,9 @@
 package com.tilem.flashcards.controller;
 
-import com.tilem.flashcards.data.dto.FlashcardDTO;
-import com.tilem.flashcards.data.entity.Flashcard;
-import com.tilem.flashcards.data.enums.YesNo;
 import com.tilem.flashcards.data.dto.AnswerDTO;
-import com.tilem.flashcards.data.dto.BlobDataDTO;
+import com.tilem.flashcards.data.dto.FlashcardDTO;
 import com.tilem.flashcards.data.dto.PromptDTO;
+import com.tilem.flashcards.data.entity.Flashcard;
 import com.tilem.flashcards.data.entity.Prompt;
 import com.tilem.flashcards.service.FlashcardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +52,7 @@ public class FlashcardController extends GenericController<Flashcard, FlashcardD
         return flashcardService.getFlashcardsByDeck(deckId);
     }
 
-    @GetMapping("/hasManyCorrectAnswers/{hasManyCorrectAnswers}")
-    public List<FlashcardDTO> getByHasManyCorrectAnswers(@PathVariable YesNo hasManyCorrectAnswers) {
-        return flashcardService.getFlashcardsByHasManyCorrectAnswers(hasManyCorrectAnswers);
-    }
+    
 
     @PostMapping("/import")
     public ResponseEntity<List<FlashcardDTO>> importFlashcards(@RequestParam("file") MultipartFile file) throws IOException {
@@ -86,21 +81,12 @@ public class FlashcardController extends GenericController<Flashcard, FlashcardD
                     .build();
         }
 
-        BlobDataDTO blobDataDTO = null;
-        if (entity.getImageData() != null) {
-            blobDataDTO = BlobDataDTO.builder()
-                    .id(entity.getImageData().getId())
-                    .data(entity.getImageData().getData())
-                    .mimeType(entity.getImageData().getMimeType())
-                    .build();
-        }
+        
 
         return FlashcardDTO.builder()
                 .id(entity.getId())
                 .prompt(promptDTO)
-                .hasManyCorrectAnswers(entity.getHasManyCorrectAnswers())
                 .hasImageData(entity.getHasImageData())
-                .imageData(blobDataDTO)
                 .deckId(entity.getDeck().getId())
                 .build();
     }

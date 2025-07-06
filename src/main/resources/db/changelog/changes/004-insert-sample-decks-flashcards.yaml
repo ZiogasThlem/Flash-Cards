@@ -1,0 +1,465 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: gemini
+      changes:
+        - insert:
+            tableName: decks
+            columns:
+              - column:
+                  name: id
+                  value: "2"
+              - column:
+                  name: name
+                  value: "German Basics"
+              - column:
+                  name: description
+                  value: "Essential German words and phrases"
+              - column:
+                  name: category
+                  value: "LANGUAGE"
+        - insert:
+            tableName: decks
+            columns:
+              - column:
+                  name: id
+                  value: "3"
+              - column:
+                  name: name
+                  value: "History Facts"
+              - column:
+                  name: description
+                  value: "Key historical events and figures"
+              - column:
+                  name: category
+                  value: "HISTORY"
+
+        - insert:
+            tableName: prompts
+            columns:
+              - column:
+                  name: id
+                  value: "2"
+              - column:
+                  name: prompt_body
+                  value: "What is 'hello' in German?"
+              - column:
+                  name: has_single_answer
+                  value: "Y"
+        - insert:
+            tableName: answers
+            columns:
+              - column:
+                  name: id
+                  value: "2"
+              - column:
+                  name: prompt_id
+                  value: "2"
+              - column:
+                  name: answer_body
+                  value: "Hallo"
+              - column:
+                  name: notes
+                  value: "Common greeting"
+        - insert:
+            tableName: flashcards
+            columns:
+              - column:
+                  name: id
+                  value: "2"
+              - column:
+                  name: prompt_id
+                  value: "2"
+              - column:
+                  name: deck_id
+                  value: "2"
+              - column:
+                  name: has_image_data
+                  value: "N"
+
+        - insert:
+            tableName: prompts
+            columns:
+              - column:
+                  name: id
+                  value: "3"
+              - column:
+                  name: prompt_body
+                  value: "What is 'thank you' in German?"
+              - column:
+                  name: has_single_answer
+                  value: "Y"
+        - insert:
+            tableName: answers
+            columns:
+              - column:
+                  name: id
+                  value: "3"
+              - column:
+                  name: prompt_id
+                  value: "3"
+              - column:
+                  name: answer_body
+                  value: "Danke"
+              - column:
+                  name: notes
+                  value: "Formal and informal"
+        - insert:
+            tableName: flashcards
+            columns:
+              - column:
+                  name: id
+                  value: "3"
+              - column:
+                  name: prompt_id
+                  value: "3"
+              - column:
+                  name: deck_id
+                  value: "2"
+              - column:
+                  name: has_image_data
+                  value: "N"
+
+        - insert:
+            tableName: prompts
+            columns:
+              - column:
+                  name: id
+                  value: "4"
+              - column:
+                  name: prompt_body
+                  value: "What is 'goodbye' in German?"
+              - column:
+                  name: has_single_answer
+                  value: "Y"
+        - insert:
+            tableName: answers
+            columns:
+              - column:
+                  name: id
+                  value: "4"
+              - column:
+                  name: prompt_id
+                  value: "4"
+              - column:
+                  name: answer_body
+                  value: "Auf Wiedersehen"
+              - column:
+                  name: notes
+                  value: "Formal goodbye"
+        - insert:
+            tableName: flashcards
+            columns:
+              - column:
+                  name: id
+                  value: "4"
+              - column:
+                  name: prompt_id
+                  value: "4"
+              - column:
+                  name: deck_id
+                  value: "2"
+              - column:
+                  name: has_image_data
+                  value: "N"
+
+        - insert:
+            tableName: prompts
+            columns:
+              - column:
+                  name: id
+                  value: "5"
+              - column:
+                  name: prompt_body
+                  value: "What is 'please' in German?"
+              - column:
+                  name: has_single_answer
+                  value: "Y"
+        - insert:
+            tableName: answers
+            columns:
+              - column:
+                  name: id
+                  value: "5"
+              - column:
+                  name: prompt_id
+                  value: "5"
+              - column:
+                  name: answer_body
+                  value: "Bitte"
+              - column:
+                  name: notes
+                  value: "Also means 'you're welcome'"
+        - insert:
+            tableName: flashcards
+            columns:
+              - column:
+                  name: id
+                  value: "5"
+              - column:
+                  name: prompt_id
+                  value: "5"
+              - column:
+                  name: deck_id
+                  value: "2"
+              - column:
+                  name: has_image_data
+                  value: "N"
+
+        - insert:
+            tableName: prompts
+            columns:
+              - column:
+                  name: id
+                  value: "6"
+              - column:
+                  name: prompt_body
+                  value: "What is 'yes' in German?"
+              - column:
+                  name: has_single_answer
+                  value: "Y"
+        - insert:
+            tableName: answers
+            columns:
+              - column:
+                  name: id
+                  value: "6"
+              - column:
+                  name: prompt_id
+                  value: "6"
+              - column:
+                  name: answer_body
+                  value: "Ja"
+              - column:
+                  name: notes
+                  value: ""
+        - insert:
+            tableName: flashcards
+            columns:
+              - column:
+                  name: id
+                  value: "6"
+              - column:
+                  name: prompt_id
+                  value: "6"
+              - column:
+                  name: deck_id
+                  value: "2"
+              - column:
+                  name: has_image_data
+                  value: "N"
+
+        - insert:
+            tableName: prompts
+            columns:
+              - column:
+                  name: id
+                  value: "7"
+              - column:
+                  name: prompt_body
+                  value: "Who was the first President of the United States?"
+              - column:
+                  name: has_single_answer
+                  value: "Y"
+        - insert:
+            tableName: answers
+            columns:
+              - column:
+                  name: id
+                  value: "7"
+              - column:
+                  name: prompt_id
+                  value: "7"
+              - column:
+                  name: answer_body
+                  value: "George Washington"
+              - column:
+                  name: notes
+                  value: "Served from 1789 to 1797"
+        - insert:
+            tableName: flashcards
+            columns:
+              - column:
+                  name: id
+                  value: "7"
+              - column:
+                  name: prompt_id
+                  value: "7"
+              - column:
+                  name: deck_id
+                  value: "3"
+              - column:
+                  name: has_image_data
+                  value: "N"
+
+        - insert:
+            tableName: prompts
+            columns:
+              - column:
+                  name: id
+                  value: "8"
+              - column:
+                  name: prompt_body
+                  value: "In what year did World War II end?"
+              - column:
+                  name: has_single_answer
+                  value: "Y"
+        - insert:
+            tableName: answers
+            columns:
+              - column:
+                  name: id
+                  value: "8"
+              - column:
+                  name: prompt_id
+                  value: "8"
+              - column:
+                  name: answer_body
+                  value: "1945"
+              - column:
+                  name: notes
+                  value: "Ended with the surrender of Japan"
+        - insert:
+            tableName: flashcards
+            columns:
+              - column:
+                  name: id
+                  value: "8"
+              - column:
+                  name: prompt_id
+                  value: "8"
+              - column:
+                  name: deck_id
+                  value: "3"
+              - column:
+                  name: has_image_data
+                  value: "N"
+
+        - insert:
+            tableName: prompts
+            columns:
+              - column:
+                  name: id
+                  value: "9"
+              - column:
+                  name: prompt_body
+                  value: "Who discovered America?"
+              - column:
+                  name: has_single_answer
+                  value: "Y"
+        - insert:
+            tableName: answers
+            columns:
+              - column:
+                  name: id
+                  value: "9"
+              - column:
+                  name: prompt_id
+                  value: "9"
+              - column:
+                  name: answer_body
+                  value: "Christopher Columbus"
+              - column:
+                  name: notes
+                  value: "In 1492"
+        - insert:
+            tableName: flashcards
+            columns:
+              - column:
+                  name: id
+                  value: "9"
+              - column:
+                  name: prompt_id
+                  value: "9"
+              - column:
+                  name: deck_id
+                  value: "3"
+              - column:
+                  name: has_image_data
+                  value: "N"
+
+        - insert:
+            tableName: prompts
+            columns:
+              - column:
+                  name: id
+                  value: "10"
+              - column:
+                  name: prompt_body
+                  value: "What year did the Berlin Wall fall?"
+              - column:
+                  name: has_single_answer
+                  value: "Y"
+        - insert:
+            tableName: answers
+            columns:
+              - column:
+                  name: id
+                  value: "10"
+              - column:
+                  name: prompt_id
+                  value: "10"
+              - column:
+                  name: answer_body
+                  value: "1989"
+              - column:
+                  name: notes
+                  value: "Symbolized the end of the Cold War"
+        - insert:
+            tableName: flashcards
+            columns:
+              - column:
+                  name: id
+                  value: "10"
+              - column:
+                  name: prompt_id
+                  value: "10"
+              - column:
+                  name: deck_id
+                  value: "3"
+              - column:
+                  name: has_image_data
+                  value: "N"
+
+        - insert:
+            tableName: prompts
+            columns:
+              - column:
+                  name: id
+                  value: "11"
+              - column:
+                  name: prompt_body
+                  value: "Who was the first man on the moon?"
+              - column:
+                  name: has_single_answer
+                  value: "Y"
+        - insert:
+            tableName: answers
+            columns:
+              - column:
+                  name: id
+                  value: "11"
+              - column:
+                  name: prompt_id
+                  value: "11"
+              - column:
+                  name: answer_body
+                  value: "Neil Armstrong"
+              - column:
+                  name: notes
+                  value: "July 20, 1969"
+        - insert:
+            tableName: flashcards
+            columns:
+              - column:
+                  name: id
+                  value: "11"
+              - column:
+                  name: prompt_id
+                  value: "11"
+              - column:
+                  name: deck_id
+                  value: "3"
+              - column:
+                  name: has_image_data
+                  value: "N"

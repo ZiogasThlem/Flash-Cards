@@ -4,10 +4,8 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import com.tilem.flashcards.data.dto.AnswerDTO;
-import com.tilem.flashcards.data.dto.BlobDataDTO;
 import com.tilem.flashcards.data.dto.FlashcardDTO;
 import com.tilem.flashcards.data.dto.PromptDTO;
-import com.tilem.flashcards.data.entity.BlobData;
 import com.tilem.flashcards.data.entity.Deck;
 import com.tilem.flashcards.data.entity.Flashcard;
 import com.tilem.flashcards.data.entity.Prompt;
@@ -61,13 +59,7 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
         return flashcards;
     }
 
-    @Override
-    public List<FlashcardDTO> getFlashcardsByHasManyCorrectAnswers(YesNo hasManyCorrectAnswers) {
-        log.info("Fetching flashcards by hasManyCorrectAnswers: " + hasManyCorrectAnswers);
-        List<FlashcardDTO> flashcards = flashcardRepository.findByHasManyCorrectAnswers(hasManyCorrectAnswers).stream().map(this::mapToDto).collect(Collectors.toList());
-        log.info("Found " + flashcards.size() + " flashcards with hasManyCorrectAnswers: " + hasManyCorrectAnswers);
-        return flashcards;
-    }
+    
 
     @Override
     public void recordFlashcardReview(Long flashcardId, Long userId) {
@@ -97,21 +89,12 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
                     .build();
         }
 
-        BlobDataDTO blobDataDTO = null;
-        if (entity.getImageData() != null) {
-            blobDataDTO = BlobDataDTO.builder()
-                    .id(entity.getImageData().getId())
-                    .data(entity.getImageData().getData())
-                    .mimeType(entity.getImageData().getMimeType())
-                    .build();
-        }
+        
 
         return FlashcardDTO.builder()
                 .id(entity.getId())
                 .prompt(promptDTO)
-                .hasManyCorrectAnswers(entity.getHasManyCorrectAnswers())
                 .hasImageData(entity.getHasImageData())
-                .imageData(blobDataDTO)
                 .deckId(entity.getDeck().getId())
                 .build();
     }
@@ -128,7 +111,6 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
         }
         Flashcard flashcard = new Flashcard();
         flashcard.setDeck(deck);
-        flashcard.setHasManyCorrectAnswers(dto.getHasManyCorrectAnswers());
         flashcard.setHasImageData(dto.getHasImageData());
 
         if (dto.getPrompt() != null) {
@@ -155,16 +137,7 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
             flashcard.setPrompt(null);
         }
 
-        if (dto.getImageData() != null) {
-            log.info("Mapping image data for flashcard DTO ID: " + dto.getId());
-            BlobData blobData = new BlobData();
-            blobData.setData(dto.getImageData().getData());
-            blobData.setMimeType(dto.getImageData().getMimeType());
-            flashcard.setImageData(blobData);
-        } else {
-            log.info("No image data provided for flashcard DTO ID: " + dto.getId());
-            flashcard.setImageData(null);
-        }
+        
         log.info("Successfully mapped FlashcardDTO to entity for DTO ID: " + dto.getId());
         return flashcard;
     }
@@ -172,7 +145,6 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
     @Override
     protected void updateEntity(Flashcard entity, FlashcardDTO dto) {
         log.info("Updating flashcard entity with ID: " + entity.getId());
-        entity.setHasManyCorrectAnswers(dto.getHasManyCorrectAnswers());
         entity.setHasImageData(dto.getHasImageData());
 
         if (dto.getPrompt() != null) {
@@ -197,30 +169,7 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
             entity.setPrompt(null);
         }
 
-        if (dto.getImageData() != null) {
-            if (entity.getImageData() == null) {
-                log.info("Assigning new image data to flashcard ID: " + entity.getId());
-                BlobData blobData = new BlobData();
-                blobData.setData(dto.getImageData().getData());
-                blobData.setMimeType(dto.getImageData().getMimeType());
-                entity.setImageData(blobData);
-            } else {
-                log.info("Updating existing image data for flashcard ID: " + entity.getId());
-                entity.getImageData().setData(dto.getImageData().getData());
-                entity.getImageData().setMimeType(dto.getImageData().getMimeType());
-            }
-        } else {
-            if (entity.getImageData() != null) {
-                log.info("Removing image data for flashcard ID: " + entity.getId());
-                try {
-                    blobDataRepository.delete(entity.getImageData());
-                    entity.setImageData(null);
-                } catch (RuntimeException e) {
-                    log.error("Error deleting image data for flashcard ID: " + entity.getId(), e);
-                    throw e;
-                }
-            }
-        }
+        
         log.info("Successfully updated flashcard entity with ID: " + entity.getId());
     }
 
@@ -248,7 +197,6 @@ public class FlashcardServiceImpl extends GenericServiceImpl<Flashcard, Flashcar
 
                     FlashcardDTO flashcardDTO = FlashcardDTO.builder()
                             .prompt(promptDTO)
-                            .hasManyCorrectAnswers(promptDTO.getAnswers().size() > 1 ? YesNo.Y : YesNo.N)
                             .hasImageData(YesNo.N)
                             .build();
                     importedFlashcards.add(create(flashcardDTO));
