@@ -24,15 +24,17 @@ public class User extends DbEntity {
     @NotBlank
     private String username;
 
+	@NotBlank
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@ManyToMany(
+			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+			fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_decks",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "deck_id")
-    )
+		    inverseJoinColumns = @JoinColumn(name = "deck_id"))
     @Builder.Default
     private List<Deck> decks = new ArrayList<>();
 
@@ -57,8 +59,7 @@ public class User extends DbEntity {
     }
 
     @Override
-    public  String getSimpleLabel() {
+    public String getSimpleLabel() {
         return username;
     }
-
 }

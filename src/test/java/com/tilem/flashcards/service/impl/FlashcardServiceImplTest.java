@@ -8,6 +8,8 @@ import com.tilem.flashcards.data.entity.Deck;
 import com.tilem.flashcards.data.entity.Flashcard;
 import com.tilem.flashcards.data.entity.Prompt;
 import com.tilem.flashcards.data.enums.YesNo;
+import com.tilem.flashcards.mapper.FlashcardMapper;
+import com.tilem.flashcards.mapper.PromptMapper;
 import com.tilem.flashcards.repository.DeckRepository;
 import com.tilem.flashcards.repository.FlashcardRepository;
 import com.tilem.flashcards.service.AnswerService;
@@ -41,7 +43,11 @@ class FlashcardServiceImplTest {
     @Mock
     private AnswerService answerService;
 
-    
+	@Mock
+	private FlashcardMapper flashcardMapper;
+
+	@Mock
+	private PromptMapper promptMapper;
 
     @InjectMocks
     private FlashcardServiceImpl flashcardService;
@@ -50,7 +56,6 @@ class FlashcardServiceImplTest {
     private FlashcardDTO testFlashcardDTO;
     private Deck testDeck;
     private Prompt testPrompt;
-    
 
     @BeforeEach
     void setUp() {
@@ -69,29 +74,32 @@ class FlashcardServiceImplTest {
         testAnswer.setAnswerBody("Test Answer");
         testPrompt.setAnswers(List.of(testAnswer));
 
-        
-
         testFlashcard = new Flashcard();
         testFlashcard.setId(1L);
         testFlashcard.setDeck(testDeck);
         testFlashcard.setPrompt(testPrompt);
-        
 
-        testFlashcardDTO = FlashcardDTO.builder()
-                .id(1L)
-                .deckId(1L)
-                .prompt(PromptDTO.builder()
-                        .id(10L)
-                        .promptBody("Test Prompt")
-                        .hasSingleAnswer(YesNo.Y)
-                        .answers(Collections.singletonList(AnswerDTO.builder()
+	    testFlashcardDTO =
+			    FlashcardDTO.builder()
+					    .id(1L)
+					    .deckId(1L)
+					    .prompt(
+							    PromptDTO.builder()
+									    .id(10L)
+									    .promptBody("Test Prompt")
+									    .hasSingleAnswer(YesNo.Y)
+									    .answers(
+											    Collections.singletonList(
+													    AnswerDTO.builder()
                                 .id(100L)
                                 .promptId(10L)
                                 .answerBody("Test Answer")
                                 .build()))
-                        .build())
-                
-                .build();
+									    .build())
+					    .build();
+
+	    lenient().when(flashcardMapper.toDto(testFlashcard)).thenReturn(testFlashcardDTO);
+	    lenient().when(promptMapper.toDto(testPrompt)).thenReturn(testFlashcardDTO.getPrompt());
     }
 
     @Test
@@ -104,9 +112,6 @@ class FlashcardServiceImplTest {
         assertEquals(1, result.size());
         assertEquals(testFlashcardDTO.getId(), result.get(0).getId());
         verify(flashcardRepository, times(1)).findByDeckId(1L);
+	    verify(flashcardMapper, times(1)).toDto(testFlashcard);
     }
-
-    
-
-    
 }

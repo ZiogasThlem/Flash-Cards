@@ -1,93 +1,48 @@
 package com.tilem.flashcards.controller;
 
-import com.tilem.flashcards.data.dto.AnswerDTO;
 import com.tilem.flashcards.data.dto.FlashcardDTO;
-import com.tilem.flashcards.data.dto.PromptDTO;
 import com.tilem.flashcards.data.entity.Flashcard;
-import com.tilem.flashcards.data.entity.Prompt;
 import com.tilem.flashcards.service.FlashcardService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/flashcards")
 public class FlashcardController extends GenericController<Flashcard, FlashcardDTO> {
 
-    @Autowired
-    private FlashcardService flashcardService;
+	public FlashcardController(FlashcardService flashcardService) {
+		super(flashcardService);
+	}
 
-    @GetMapping
-    public ResponseEntity<List<FlashcardDTO>> getAll() {
-        return super.getAll();
-    }
+	@GetMapping
+	public ResponseEntity<List<FlashcardDTO>> getAll() {
+		return super.getAll();
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<FlashcardDTO> getById(@PathVariable Long id) {
-        return super.getById(id);
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<FlashcardDTO> getById(@PathVariable Long id) {
+		return super.getById(id);
+	}
 
-    @PostMapping
-    public ResponseEntity<FlashcardDTO> create(@RequestBody FlashcardDTO dto) {
-        return super.create(dto);
-    }
+	@PostMapping
+	public ResponseEntity<FlashcardDTO> create(@RequestBody FlashcardDTO dto) {
+		return super.create(dto);
+	}
 
-    @PutMapping("/{id}")
-    public ResponseEntity<FlashcardDTO> update(@PathVariable Long id, @RequestBody FlashcardDTO dto) {
-        return super.update(id, dto);
-    }
+	@PutMapping("/{id}")
+	public ResponseEntity<FlashcardDTO> update(@PathVariable Long id, @RequestBody FlashcardDTO dto) {
+		return super.update(id, dto);
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        return super.delete(id);
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		return super.delete(id);
+	}
 
-    @GetMapping("/deck/{deckId}")
-    public List<FlashcardDTO> getByDeck(@PathVariable Long deckId) {
-        return flashcardService.getFlashcardsByDeck(deckId);
-    }
-
-    
-
-    @PostMapping("/import")
-    public ResponseEntity<List<FlashcardDTO>> importFlashcards(@RequestParam("file") MultipartFile file) throws IOException {
-        List<FlashcardDTO> importedFlashcards = flashcardService.importFlashcardsFromFile(new String(file.getBytes()));
-        return ResponseEntity.ok(importedFlashcards);
-    }
-
-    @Override
-    protected FlashcardDTO mapToDto(Flashcard entity) {
-        PromptDTO promptDTO = null;
-        if (entity.getPrompt() != null) {
-            Prompt prompt = entity.getPrompt();
-            List<AnswerDTO> answerDTOs = prompt.getAnswers().stream()
-                    .map(answer -> AnswerDTO.builder()
-                            .id(answer.getId())
-                            .promptId(answer.getPrompt().getId())
-                            .answerBody(answer.getAnswerBody())
-                            .notes(answer.getNotes())
-                            .build())
-                    .collect(Collectors.toList());
-            promptDTO = PromptDTO.builder()
-                    .id(prompt.getId())
-                    .promptBody(prompt.getPromptBody())
-                    .hasSingleAnswer(prompt.getHasSingleAnswer())
-                    .answers(answerDTOs)
-                    .build();
-        }
-
-        
-
-        return FlashcardDTO.builder()
-                .id(entity.getId())
-                .prompt(promptDTO)
-                .hasImageData(entity.getHasImageData())
-                .deckId(entity.getDeck().getId())
-                .build();
-    }
+	@GetMapping("/deck/{deckId}")
+	public List<FlashcardDTO> getByDeck(@PathVariable Long deckId) {
+		return ((FlashcardService) service).getFlashcardsByDeck(deckId);
+	}
 }

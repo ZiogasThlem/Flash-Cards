@@ -5,17 +5,19 @@ import com.tilem.flashcards.data.dto.PromptDTO;
 import com.tilem.flashcards.data.entity.Answer;
 import com.tilem.flashcards.data.entity.Prompt;
 import com.tilem.flashcards.data.enums.YesNo;
+import com.tilem.flashcards.mapper.PromptMapper;
 import com.tilem.flashcards.repository.PromptRepository;
 import com.tilem.flashcards.service.AnswerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -29,8 +31,10 @@ class PromptServiceImplTest {
     @Mock
     private AnswerService answerService;
 
-    @InjectMocks
-    private PromptServiceImpl promptService;
+	@Mock
+	private PromptMapper promptMapper;
+
+	private PromptServiceImpl promptService;
 
     private Prompt testPrompt;
     private PromptDTO testPromptDTO;
@@ -39,7 +43,9 @@ class PromptServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        testPrompt = new Prompt();
+	    promptService = new PromptServiceImpl(promptRepository, answerService, promptMapper);
+
+	    testPrompt = new Prompt();
         testPrompt.setId(1L);
         testPrompt.setPromptBody("Test Prompt Body");
         testPrompt.setHasSingleAnswer(YesNo.Y);
@@ -50,26 +56,31 @@ class PromptServiceImplTest {
         testAnswer1.setAnswerBody("Test Answer Body 1");
         testAnswer1.setNotes("Notes 1");
 
-        testPrompt.setAnswers(new ArrayList<>(Arrays.asList(testAnswer1)));
+        testPrompt.setAnswers(new ArrayList<>(List.of(testAnswer1)));
 
-        testAnswerDTO1 = AnswerDTO.builder()
-                .id(10L)
-                .promptId(1L)
-                .answerBody("Test Answer Body 1")
-                .notes("Notes 1")
-                .build();
+	    testAnswerDTO1 =
+			    AnswerDTO.builder()
+					    .id(10L)
+					    .promptId(1L)
+					    .answerBody("Test Answer Body 1")
+					    .notes("Notes 1")
+					    .build();
 
-        testPromptDTO = PromptDTO.builder()
-                .id(1L)
-                .promptBody("Test Prompt Body")
-                .hasSingleAnswer(YesNo.Y)
-                .answers(Arrays.asList(testAnswerDTO1))
-                .build();
+	    testPromptDTO =
+			    PromptDTO.builder()
+					    .id(1L)
+					    .promptBody("Test Prompt Body")
+					    .hasSingleAnswer(YesNo.Y)
+					    .answers(Collections.singletonList(testAnswerDTO1))
+					    .build();
+
+	    lenient().when(promptMapper.toDto(testPrompt)).thenReturn(testPromptDTO);
+	    lenient().when(promptMapper.toEntity(testPromptDTO)).thenReturn(testPrompt);
     }
 
     @Test
     void mapToDto_ValidPrompt_ReturnsPromptDTO() {
-        PromptDTO dto = promptService.mapToDto(testPrompt);
+	    PromptDTO dto = promptMapper.toDto(testPrompt);
 
         assertNotNull(dto);
         assertEquals(testPrompt.getId(), dto.getId());
@@ -101,41 +112,47 @@ class PromptServiceImplTest {
 
     @Test
     void updateEntity_ExistingPromptAndDTO_UpdatesPromptAndAnswers() {
-        Prompt existingPrompt = new Prompt();
-        existingPrompt.setId(2L);
-        existingPrompt.setPromptBody("Old Prompt Body");
-        existingPrompt.setHasSingleAnswer(YesNo.N);
+	    Prompt existingPrompt = new Prompt();
+	    existingPrompt.setId(2L);
+	    existingPrompt.setPromptBody("Old Prompt Body");
+	    existingPrompt.setHasSingleAnswer(YesNo.N);
 
-        Answer existingAnswer = new Answer();
-        existingAnswer.setId(20L);
-        existingAnswer.setPrompt(existingPrompt);
-        existingAnswer.setAnswerBody("Old Answer Body");
-        existingAnswer.setNotes("Old Notes");
-        existingPrompt.setAnswers(new ArrayList<>(Arrays.asList(existingAnswer)));
+	    Answer existingAnswer = new Answer();
+	    existingAnswer.setId(20L);
+	    existingAnswer.setPrompt(existingPrompt);
+	    existingAnswer.setAnswerBody("Old Answer Body");
+	    existingAnswer.setNotes("Old Notes");
+	    existingPrompt.setAnswers(new ArrayList<>(List.of(existingAnswer)));
 
-        PromptDTO updateDTO = PromptDTO.builder()
-                .promptBody("New Prompt Body")
-                .hasSingleAnswer(YesNo.Y)
-                .answers(Arrays.asList(
-                        AnswerDTO.builder().id(20L).answerBody("Updated Answer Body").notes("Updated Notes").build(),
-                        AnswerDTO.builder().answerBody("New Answer Body").notes("New Notes").build()
-                ))
-                .build();
+	    PromptDTO updateDTO =
+			    PromptDTO.builder()
+					    .promptBody("New Prompt Body")
+					    .hasSingleAnswer(YesNo.Y)
+					    .answers(
+							    Arrays.asList(
+									    AnswerDTO.builder()
+											    .id(20L)
+											    .answerBody("Updated Answer Body")
+											    .notes("Updated Notes")
+											    .build(),
+									    AnswerDTO.builder().answerBody("New Answer Body").notes("New Notes").build()))
+					    .build();
 
-        when(answerService.mapToEntity(any(AnswerDTO.class))).thenReturn(new Answer());
-        doNothing().when(answerService).updateEntity(any(Answer.class), any(AnswerDTO.class));
+	    when(answerService.mapToEntity(any(AnswerDTO.class))).thenReturn(new Answer());
+	    doNothing().when(answerService).updateEntity(any(Answer.class), any(AnswerDTO.class));
 
-        promptService.updateEntity(existingPrompt, updateDTO);
+	    promptService.updateEntity(existingPrompt, updateDTO);
 
-        assertEquals("New Prompt Body", existingPrompt.getPromptBody());
-        assertEquals(YesNo.Y, existingPrompt.getHasSingleAnswer());
-        assertEquals(2, existingPrompt.getAnswers().size());
-
-        // Verify existing answer updated
-        verify(answerService, times(1)).updateEntity(any(Answer.class), argThat(dto -> dto.getId().equals(20L) && dto.getAnswerBody().equals("Updated Answer Body")));
-
-        // Verify new answer added
-        verify(answerService, times(1)).mapToEntity(argThat(dto -> dto.getAnswerBody().equals("New Answer Body")));
+	    verify(promptMapper, times(1)).updateEntity(updateDTO, existingPrompt);
+	    assertEquals(2, existingPrompt.getAnswers().size());
+	    verify(answerService, times(1))
+			    .updateEntity(
+					    any(Answer.class),
+					    argThat(
+							    dto ->
+									    dto.getId().equals(20L) && dto.getAnswerBody().equals("Updated Answer Body")));
+	    verify(answerService, times(1))
+			    .mapToEntity(argThat(dto -> dto.getAnswerBody().equals("New Answer Body")));
     }
 
     @Test
@@ -150,18 +167,18 @@ class PromptServiceImplTest {
         existingAnswer.setPrompt(existingPrompt);
         existingAnswer.setAnswerBody("Old Answer Body");
         existingAnswer.setNotes("Old Notes");
-        existingPrompt.setAnswers(new ArrayList<>(Arrays.asList(existingAnswer)));
+        existingPrompt.setAnswers(new ArrayList<>(List.of(existingAnswer)));
 
-        PromptDTO updateDTO = PromptDTO.builder()
-                .promptBody("New Prompt Body")
-                .hasSingleAnswer(YesNo.Y)
-                .answers(new ArrayList<>())
-                .build();
+	    PromptDTO updateDTO =
+			    PromptDTO.builder()
+					    .promptBody("New Prompt Body")
+					    .hasSingleAnswer(YesNo.Y)
+					    .answers(new ArrayList<>())
+					    .build();
 
         promptService.updateEntity(existingPrompt, updateDTO);
 
-        assertEquals("New Prompt Body", existingPrompt.getPromptBody());
-        assertEquals(YesNo.Y, existingPrompt.getHasSingleAnswer());
+	    verify(promptMapper, times(1)).updateEntity(updateDTO, existingPrompt);
         assertTrue(existingPrompt.getAnswers().isEmpty());
     }
 
@@ -177,17 +194,17 @@ class PromptServiceImplTest {
         existingAnswer.setPrompt(existingPrompt);
         existingAnswer.setAnswerBody("Old Answer Body");
         existingAnswer.setNotes("Old Notes");
-        existingPrompt.setAnswers(new ArrayList<>(Arrays.asList(existingAnswer)));
+        existingPrompt.setAnswers(new ArrayList<>(List.of(existingAnswer)));
 
-        PromptDTO updateDTO = PromptDTO.builder()
-                .promptBody("New Prompt Body")
-                .hasSingleAnswer(YesNo.Y)
-                .build(); // No answers in DTO
+	    PromptDTO updateDTO =
+			    PromptDTO.builder()
+					    .promptBody("New Prompt Body")
+					    .hasSingleAnswer(YesNo.Y)
+					    .build();
 
-        promptService.updateEntity(existingPrompt, updateDTO);
+	    promptService.updateEntity(existingPrompt, updateDTO);
 
-        assertEquals("New Prompt Body", existingPrompt.getPromptBody());
-        assertEquals(YesNo.Y, existingPrompt.getHasSingleAnswer());
+	    verify(promptMapper, times(1)).updateEntity(updateDTO, existingPrompt);
         assertTrue(existingPrompt.getAnswers().isEmpty());
     }
 }

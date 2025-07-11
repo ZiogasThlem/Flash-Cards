@@ -5,5 +5,6 @@ import com.tilem.flashcards.data.entity.Answer;
 
 public interface AnswerService extends GenericService<Answer, AnswerDTO> {
     Answer mapToEntity(AnswerDTO dto);
-    void updateEntity(Answer entity, AnswerDTO dto);
+
+	void updateEntity(Answer entity, AnswerDTO dto);
 }

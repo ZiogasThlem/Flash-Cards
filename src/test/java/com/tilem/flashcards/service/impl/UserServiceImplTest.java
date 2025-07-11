@@ -55,9 +55,12 @@ class UserServiceImplTest {
     void loadUserByUsername_UserNotFound_ThrowsUsernameNotFoundException() {
         when(userRepository.findByUsername("nonexistent")).thenReturn(Optional.empty());
 
-        UsernameNotFoundException thrown = assertThrows(UsernameNotFoundException.class, () -> {
-            userService.loadUserByUsername("nonexistent");
-        });
+	    UsernameNotFoundException thrown =
+			    assertThrows(
+					    UsernameNotFoundException.class,
+					    () -> {
+						    userService.loadUserByUsername("nonexistent");
+					    });
 
         assertTrue(thrown.getMessage().contains("User not found with username: nonexistent"));
         verify(userRepository, times(1)).findByUsername("nonexistent");

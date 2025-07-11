@@ -7,5 +7,6 @@ import java.util.Optional;
 
 @Repository
 public interface LearningSessionRepository extends GenericRepository<LearningSession> {
-    Optional<LearningSession> findByUserIdAndFlashcardId(Long userId, Long flashcardId);
+
+	Optional<LearningSession> findByUserIdAndFlashcardId(Long userId, Long flashcardId);
 }

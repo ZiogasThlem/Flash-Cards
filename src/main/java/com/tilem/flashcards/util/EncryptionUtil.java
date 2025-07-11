@@ -43,4 +43,3 @@ public class EncryptionUtil {
         return new String(decrypted, StandardCharsets.UTF_8);
     }
 }
-

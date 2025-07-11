@@ -6,8 +6,9 @@ import com.tilem.flashcards.data.entity.Flashcard;
 import java.util.List;
 
 public interface FlashcardService extends GenericService<Flashcard, FlashcardDTO> {
-    List<FlashcardDTO> getFlashcardsByDeck(Long deckId);
-    
-    void recordFlashcardReview(Long flashcardId, Long userId);
-    List<FlashcardDTO> importFlashcardsFromFile(String fileContent);
+	List<FlashcardDTO> getFlashcardsByDeck(Long deckId);
+
+	void recordFlashcardReview(Long flashcardId, Long userId);
+
+	List<FlashcardDTO> importFlashcardsFromFile(String fileContent);
 }

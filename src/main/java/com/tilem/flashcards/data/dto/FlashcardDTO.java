@@ -21,5 +21,4 @@ public class FlashcardDTO {
 
     private PromptDTO prompt;
     private YesNo hasImageData;
-
 }

@@ -1,7 +1,8 @@
 {
 	"info": {
-		"_postman_id": "a_unique_id_will_be_generated_on_import",
-		"name": "Flashcards API Collection",
+      "_postman_id": "<collection_id>",
+      "name": "Flashcards API v2",
+      "description": "A collection of API endpoints for the Flashcards application.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -9,43 +10,30 @@
 			"name": "Authentication",
 			"item": [
 				{
-					"name": "Authenticate User",
+                  "name": "Create Authentication Token",
 					"request": {
 						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
+                      "header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\"\n}"
+                          "raw": "{\n    \"username\": \"user\",\n    \"password\": \"password\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/authenticate",
+                          "raw": "{{baseUrl}}/authenticate",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"authenticate"
 							]
 						}
 					},
-					"response": [],
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var jsonData = pm.response.json();\n",
-									"pm.environment.set(\"jwtToken\", jsonData.jwt);\n"
-								],
-								"type": "text/javascript"
-							}
-						}
-					]
+                  "response": []
 				}
 			]
 		},
@@ -56,19 +44,13 @@
 					"name": "Get All Users",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/users",
+                          "raw": "{{baseUrl}}/users",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"users"
 							]
 						}
@@ -79,19 +61,13 @@
 					"name": "Get User by ID",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/users/1",
+                          "raw": "{{baseUrl}}/users/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"users",
 								"1"
 							]
@@ -103,23 +79,22 @@
 					"name": "Create User",
 					"request": {
 						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
+                      "header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"newuser\",\n    \"password\": \"securepassword\"\n}"
+                          "raw": "{\n    \"username\": \"newuser\",\n    \"password\": \"password\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/users",
+                          "raw": "{{baseUrl}}/users",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"users"
 							]
 						}
@@ -130,27 +105,22 @@
 					"name": "Update User",
 					"request": {
 						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"updateduser\",\n    \"password\": \"newsecurepassword\"\n}"
+                          "raw": "{\n    \"username\": \"updateduser\",\n    \"password\": \"newpassword\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/users/1",
+                          "raw": "{{baseUrl}}/users/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"users",
 								"1"
 							]
@@ -162,23 +132,18 @@
 					"name": "Delete User",
 					"request": {
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/users/1",
+                          "raw": "{{baseUrl}}/users/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"users",
 								"1"
 							]
 						}
+
 					},
 					"response": []
 				}
@@ -191,20 +156,13 @@
 					"name": "Get All Decks",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/decks",
+                          "raw": "{{baseUrl}}/decks",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-
-								"api",
 								"decks"
 							]
 						}
@@ -215,19 +173,13 @@
 					"name": "Get Deck by ID",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/decks/1",
+                          "raw": "{{baseUrl}}/decks/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"decks",
 								"1"
 							]
@@ -239,27 +191,22 @@
 					"name": "Create Deck",
 					"request": {
 						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"My New Deck\"\n}"
+                          "raw": "{\n    \"name\": \"New Deck\",\n    \"category\": \"GENERAL\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/decks",
+                          "raw": "{{baseUrl}}/decks",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"decks"
 							]
 						}
@@ -270,27 +217,22 @@
 					"name": "Update Deck",
 					"request": {
 						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Updated Deck Name\"\n}"
+                          "raw": "{\n    \"name\": \"Updated Deck\",\n    \"category\": \"SCIENCE\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/decks/1",
+                          "raw": "{{baseUrl}}/decks/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"decks",
 								"1"
 							]
@@ -302,25 +244,47 @@
 					"name": "Delete Deck",
 					"request": {
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/decks/1",
+                          "raw": "{{baseUrl}}/decks/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"decks",
 								"1"
 							]
 						}
 					},
 					"response": []
+                },
+              {
+                "name": "Import Decks",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                      {
+                        "key": "file",
+                        "type": "file",
+						  "src": ""
+                      }
+                    ]
+                  },
+                  "url": {
+                    "raw": "{{baseUrl}}/decks/import",
+                    "host": [
+                      "{{baseUrl}}"
+                    ],
+                    "path": [
+                      "decks",
+                      "import"
+                    ]
+                  }
+                },
+                "response": []
 				}
 			]
 		},
@@ -331,19 +295,13 @@
 					"name": "Get All Flashcards",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/flashcards",
+                          "raw": "{{baseUrl}}/flashcards",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"flashcards"
 							]
 						}
@@ -354,19 +312,13 @@
 					"name": "Get Flashcard by ID",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/flashcards/1",
+                          "raw": "{{baseUrl}}/flashcards/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"flashcards",
 								"1"
 							]
@@ -378,27 +330,22 @@
 					"name": "Create Flashcard",
 					"request": {
 						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"deckId\": 1, \n    \"prompt\": {\n        \"promptBody\": \"What is the capital of Germany?\",\n        \"hasSingleAnswer\": \"Y\",\n        \"answers\": [\n            {\n                \"answerBody\": \"Berlin\",\n                \"notes\": \"Correct answer\"\n            }\n        ]\n    }\n}"
+                          "raw": "{\n    \"question\": \"What is the capital of France?\",\n    \"answer\": \"Paris\",\n    \"deckId\": 1\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/flashcards",
+                          "raw": "{{baseUrl}}/flashcards",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"flashcards"
 							]
 						}
@@ -409,27 +356,22 @@
 					"name": "Update Flashcard",
 					"request": {
 						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"deckId\": 1, \n    \"prompt\": {\n        \"id\": 1, \n        \"promptBody\": \"What is the capital of France? (Updated)\",\n        \"hasSingleAnswer\": \"Y\",\n        \"answers\": [\n            {\n                \"id\": 1, \n                \"answerBody\": \"Paris (Updated)\",\n                \"notes\": \"Updated notes\"\n            }\n        ]\n    }\n}"
+                          "raw": "{\n    \"question\": \"What is the capital of Spain?\",\n    \"answer\": \"Madrid\",\n    \"deckId\": 1\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/flashcards/1",
+                          "raw": "{{baseUrl}}/flashcards/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"flashcards",
 								"1"
 							]
@@ -441,19 +383,13 @@
 					"name": "Delete Flashcard",
 					"request": {
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/flashcards/1",
+                          "raw": "{{baseUrl}}/flashcards/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"flashcards",
 								"1"
 							]
@@ -462,22 +398,16 @@
 					"response": []
 				},
 				{
-					"name": "Get Flashcards by Deck ID",
+                  "name": "Get Flashcards by Deck",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/flashcards/deck/1",
+                          "raw": "{{baseUrl}}/flashcards/deck/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
 								"flashcards",
 								"deck",
 								"1"
@@ -485,26 +415,35 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Get Flashcards by Has Many Correct Answers",
+                }
+            ]
+        },
+      {
+        "name": "Learning Sessions",
+        "item": [
+          {
+            "name": "Record Review",
 					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "method": "POST",
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/flashcards/hasManyCorrectAnswers/Y",
+                          "raw": "{{baseUrl}}/learning-sessions/review?userId=1&flashcardId=1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
-								"hasManyCorrectAnswers",
-								"Y"
+                              "learning-sessions",
+                              "review"
+                            ],
+                          "query": [
+                            {
+                              "key": "userId",
+                              "value": "1"
+                            },
+                            {
+                              "key": "flashcardId",
+                              "value": "1"
+                            }
 							]
 						}
 					},
@@ -513,49 +452,37 @@
 			]
 		},
 		{
-			"name": "Prompts",
+          "name": "Answers",
 			"item": [
 				{
-					"name": "Get All Prompts",
+                  "name": "Get All Answers",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/prompts",
+                          "raw": "{{baseUrl}}/answers",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
-								"prompts"
+                              "answers"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get Prompt by ID",
+                  "name": "Get Answer by ID",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/prompts/1",
+                          "raw": "{{baseUrl}}/answers/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
-								"prompts",
+                              "answers",
 								"1"
 							]
 						}
@@ -563,62 +490,52 @@
 					"response": []
 				},
 				{
-					"name": "Create Prompt",
+                  "name": "Create Answer",
 					"request": {
 						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"promptBody\": \"What is the capital of Spain?\",\n    \"hasSingleAnswer\": \"Y\",\n    \"cardId\": 1, \n    \"answers\": [\n        {\n            \"answerBody\": \"Madrid\",\n            \"notes\": \"Correct answer\"\n        }\n    ]\n}"
+                          "raw": "{\n    \"correct\": true,\n    \"flashcardId\": 1,\n    \"userId\": 1\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/prompts",
+                          "raw": "{{baseUrl}}/answers",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
-								"prompts"
+                              "answers"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Update Prompt",
+                  "name": "Update Answer",
 					"request": {
 						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"promptBody\": \"What is the capital of Spain? (Updated)\",\n    \"hasSingleAnswer\": \"Y\",\n    \"cardId\": 1, \n    \"answers\": [\n        {\n            \"id\": 1, \n            \"answerBody\": \"Madrid (Updated)\",\n            \"notes\": \"Updated notes\"\n        }\n    ]\n}"
+                          "raw": "{\n    \"correct\": false,\n    \"flashcardId\": 1,\n    \"userId\": 1\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/prompts/1",
+                          "raw": "{{baseUrl}}/answers/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
-								"prompts",
+                              "answers",
 								"1"
 							]
 						}
@@ -626,23 +543,17 @@
 					"response": []
 				},
 				{
-					"name": "Delete Prompt",
+                  "name": "Delete Answer",
 					"request": {
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/prompts/1",
+                          "raw": "{{baseUrl}}/answers/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
-								"prompts",
+                              "answers",
 								"1"
 							]
 						}
@@ -652,49 +563,37 @@
 			]
 		},
 		{
-			"name": "Answers",
+          "name": "Prompts",
 			"item": [
 				{
-					"name": "Get All Answers",
+                  "name": "Get All Prompts",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/answers",
+                          "raw": "{{baseUrl}}/prompts",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
-								"answers"
+                              "prompts"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get Answer by ID",
+                  "name": "Get Prompt by ID",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/answers/1",
+                          "raw": "{{baseUrl}}/prompts/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
-								"answers",
+                              "prompts",
 								"1"
 							]
 						}
@@ -702,62 +601,52 @@
 					"response": []
 				},
 				{
-					"name": "Create Answer",
+                  "name": "Create Prompt",
 					"request": {
 						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"promptId\": 1,\n    \"answerBody\": \"New Answer Text\",\n    \"notes\": \"Notes for new answer\"\n}"
+                          "raw": "{\n    \"text\": \"This is a prompt.\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/answers",
+                          "raw": "{{baseUrl}}/prompts",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
-								"answers"
+                              "prompts"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Update Answer",
+                  "name": "Update Prompt",
 					"request": {
 						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"promptId\": 1,\n    \"answerBody\": \"Updated Answer Text\",\n    \"notes\": \"Updated notes for answer\"\n}"
+                          "raw": "{\n    \"text\": \"This is an updated prompt.\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/answers/1",
+                          "raw": "{{baseUrl}}/prompts/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
-								"answers",
+                              "prompts",
 								"1"
 							]
 						}
@@ -765,23 +654,17 @@
 					"response": []
 				},
 				{
-					"name": "Delete Answer",
+                  "name": "Delete Prompt",
 					"request": {
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwtToken}}"
-							}
-						],
+                      "header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/answers/1",
+                          "raw": "{{baseUrl}}/prompts/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
-								"answers",
+                              "prompts",
 								"1"
 							]
 						}
@@ -794,8 +677,11 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "http://localhost:8080",
-			"type": "string"
+			"value": "http://localhost:8080/flashcards/api"
+        },
+		{
+			"key": "jwt_token",
+			"value": ""
 		}
 	]
 }

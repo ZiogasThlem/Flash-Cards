@@ -4,68 +4,54 @@ import com.tilem.flashcards.data.dto.AnswerDTO;
 import com.tilem.flashcards.data.dto.PromptDTO;
 import com.tilem.flashcards.data.entity.Answer;
 import com.tilem.flashcards.data.entity.Prompt;
+import com.tilem.flashcards.mapper.PromptMapper;
 import com.tilem.flashcards.repository.PromptRepository;
 import com.tilem.flashcards.service.AnswerService;
 import com.tilem.flashcards.service.PromptService;
 import com.tilem.flashcards.util.LogWrapper;
-import java.lang.invoke.MethodHandles;
 import org.springframework.stereotype.Service;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO> implements PromptService {
+public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO, PromptRepository>
+		implements PromptService {
 
     private final AnswerService answerService;
+	private final PromptMapper promptMapper;
     private static final LogWrapper log = LogWrapper.getLogger(MethodHandles.lookup().lookupClass());
 
-    public PromptServiceImpl(PromptRepository promptRepository, AnswerService answerService) {
-        super(promptRepository);
+	public PromptServiceImpl(
+			PromptRepository promptRepository, AnswerService answerService, PromptMapper promptMapper) {
+		super(promptRepository, promptMapper);
         this.answerService = answerService;
-    }
-
-    @Override
-    protected PromptDTO mapToDto(Prompt entity) {
-        log.info("Mapping Prompt entity to DTO for entity ID: " + entity.getId());
-        List<AnswerDTO> answerDTOs = entity.getAnswers().stream()
-                .map(answer -> AnswerDTO.builder()
-                        .id(answer.getId())
-                        .promptId(answer.getPrompt().getId())
-                        .answerBody(answer.getAnswerBody())
-                        .notes(answer.getNotes())
-                        .build())
-                .collect(Collectors.toList());
-
-        PromptDTO promptDTO = PromptDTO.builder()
-                .id(entity.getId())
-                .promptBody(entity.getPromptBody())
-                .hasSingleAnswer(entity.getHasSingleAnswer())
-                .answers(answerDTOs)
-                .build();
-        log.info("Successfully mapped Prompt entity to DTO for entity ID: " + entity.getId());
-        return promptDTO;
+		this.promptMapper = promptMapper;
     }
 
     @Override
     public Prompt mapToEntity(PromptDTO dto) {
         log.info("Mapping PromptDTO to entity for DTO ID: " + dto.getId());
-        Prompt prompt = new Prompt();
-        prompt.setPromptBody(dto.getPromptBody());
-        prompt.setHasSingleAnswer(dto.getHasSingleAnswer());
+	    Prompt prompt = mapper.toEntity(dto);
         if (dto.getAnswers() != null) {
-            List<Answer> answers = dto.getAnswers().stream()
-                    .map(answerDTO -> {
-                        try {
-                            return answerService.mapToEntity(answerDTO);
-                        } catch (Exception e) {
-                            log.error("Error mapping answer DTO to entity for prompt DTO ID: " + dto.getId(), e);
-                            throw e;
-                        }
-                    })
-                    .collect(Collectors.toList());
-            answers.forEach(answer -> answer.setPrompt(prompt));
+	        List<Answer> answers =
+			        dto.getAnswers().stream()
+					        .map(
+							        answerDTO -> {
+								        try {
+									        Answer answer = answerService.mapToEntity(answerDTO);
+									        answer.setPrompt(prompt);
+									        return answer;
+								        } catch (Exception e) {
+									        log.error(
+											        "Error mapping answer DTO to entity for prompt DTO ID: " + dto.getId(),
+											        e);
+									        throw e;
+								        }
+							        })
+					        .collect(Collectors.toList());
             prompt.setAnswers(answers);
         }
         log.info("Successfully mapped PromptDTO to entity for DTO ID: " + dto.getId());
@@ -75,8 +61,7 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO> imp
     @Override
     public void updateEntity(Prompt entity, PromptDTO dto) {
         log.info("Updating Prompt entity with ID: " + entity.getId());
-        entity.setPromptBody(dto.getPromptBody());
-        entity.setHasSingleAnswer(dto.getHasSingleAnswer());
+	    mapper.updateEntity(dto, entity);
 
         if (dto.getAnswers() != null) {
             List<Answer> existingAnswers = new ArrayList<>(entity.getAnswers());
@@ -88,10 +73,11 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO> imp
                         existingAnswers.stream()
                                 .filter(a -> a.getId().equals(answerDTO.getId()))
                                 .findFirst()
-                                .ifPresent(answer -> {
-                                    answerService.updateEntity(answer, answerDTO);
-                                    updatedAnswers.add(answer);
-                                });
+		                        .ifPresent(
+				                        answer -> {
+					                        answerService.updateEntity(answer, answerDTO);
+					                        updatedAnswers.add(answer);
+				                        });
                     } else {
                         Answer newAnswer = answerService.mapToEntity(answerDTO);
                         newAnswer.setPrompt(entity);
@@ -108,7 +94,10 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO> imp
                     .filter(answer -> !entity.getAnswers().contains(answer))
                     .forEach(entity.getAnswers()::add);
         } else {
-            log.info("No answers provided in DTO for prompt ID: " + entity.getId() + ". Clearing existing answers.");
+	        log.info(
+			        "No answers provided in DTO for prompt ID: "
+					        + entity.getId()
+					        + ". Clearing existing answers.");
             entity.getAnswers().clear();
         }
         log.info("Successfully updated Prompt entity with ID: " + entity.getId());

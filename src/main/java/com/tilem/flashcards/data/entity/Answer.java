@@ -13,27 +13,27 @@ import lombok.*;
 @Table(name = "answers")
 public class Answer extends DbEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "prompt_id")
-    private Prompt prompt;
+	@ManyToOne
+	@JoinColumn(name = "prompt_id")
+	private Prompt prompt;
 
-    @NotBlank
-    @Column(name = "answer_body")
-    private String answerBody;
+	@NotBlank
+	@Column(name = "answer_body")
+	private String answerBody;
 
-    private String notes;
+	private String notes;
 
-    @Override
-    public String getEntityTitle() {
-        return answerBody;
-    }
+	@Override
+	public String getEntityTitle() {
+		return answerBody;
+	}
 
-    @Override
-    public Long getUniqueID() {
-        return id;
-    }
+	@Override
+	public Long getUniqueID() {
+		return id;
+	}
 }

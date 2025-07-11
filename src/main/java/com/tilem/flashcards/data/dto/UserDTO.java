@@ -14,14 +14,10 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
 
-    private Long id;
+	private Long id;
 
-    @NotBlank(message = "Username is mandatory")
-    private String username;
+	@NotBlank(message = "Username is mandatory")
+	private String username;
 
-    @NotBlank(message = "Password is mandatory")
-    private String password;
-
-    private List<Long> deckIds;
-
+	private List<DeckDTO> decks;
 }

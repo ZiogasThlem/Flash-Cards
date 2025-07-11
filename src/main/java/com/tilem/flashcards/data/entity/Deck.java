@@ -2,7 +2,6 @@ package com.tilem.flashcards.data.entity;
 
 import com.tilem.flashcards.data.enums.DeckCategory;
 import jakarta.persistence.*;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -27,7 +26,6 @@ public class Deck extends DbEntity {
     private String name;
 
     private String description;
-
 
     @Enumerated(EnumType.STRING)
     private DeckCategory category;

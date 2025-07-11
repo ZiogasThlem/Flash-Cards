@@ -7,8 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum YesNo implements DbEnum {
-
-    N("N", "Όχι"), Y("Y", "Ναι");
+	N("N", "Όχι"),
+	Y("Y", "Ναι");
 
     private final String dbValue;
     private final String label;
@@ -34,16 +34,20 @@ public enum YesNo implements DbEnum {
         if (StringUtils.isBlank(yesNoString)) {
             return null;
         }
-        if ("Y".equalsIgnoreCase(yesNoString) || "Yes".equalsIgnoreCase(yesNoString)
-                || yesNoString.equalsIgnoreCase("Ναι") || yesNoString.equalsIgnoreCase("NAI")) {
+	    if ("Y".equalsIgnoreCase(yesNoString)
+			    || "Yes".equalsIgnoreCase(yesNoString)
+			    || yesNoString.equalsIgnoreCase("Ναι")
+			    || yesNoString.equalsIgnoreCase("NAI")) {
             return YesNo.Y;
-        } else if ("N".equalsIgnoreCase(yesNoString) || "No".equalsIgnoreCase(yesNoString)
-                || yesNoString.equalsIgnoreCase("Όχι") || yesNoString.equalsIgnoreCase("OXI")
-                || yesNoString.equalsIgnoreCase("ΟΧΙ")) { // 2 φορές ΟΧΙ μία στα ελληνικά και μία στα αγγλικά.
-            return YesNo.N;
-        } else {
+	    } else if ("N".equalsIgnoreCase(yesNoString)
+			    || "No".equalsIgnoreCase(yesNoString)
+			    || yesNoString.equalsIgnoreCase("Όχι")
+			    || yesNoString.equalsIgnoreCase("OXI")
+			    || yesNoString.equalsIgnoreCase(
+			    "ΟΧΙ")) {
+		    return YesNo.N;
+	    } else {
             return null;
         }
     }
-
 }

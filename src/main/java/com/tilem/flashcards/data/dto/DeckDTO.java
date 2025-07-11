@@ -16,14 +16,13 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DeckDTO {
 
-    private Long id;
+	private Long id;
 
-    @NotBlank(message = "Name is mandatory")
-    private String name;
+	@NotBlank(message = "Name is mandatory")
+	private String name;
 
-    private String description;
-    private DeckCategory category;
-    private List<String> users;
-    private List<String> flashcards;
+	private String description;
+	private DeckCategory category;
 
+	private List<String> flashcards;
 }
