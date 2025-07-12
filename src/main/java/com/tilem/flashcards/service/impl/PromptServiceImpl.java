@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO, PromptRepository>
@@ -36,23 +35,17 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO, Pro
         log.info("Mapping PromptDTO to entity for DTO ID: " + dto.getId());
 	    Prompt prompt = mapper.toEntity(dto);
         if (dto.getAnswers() != null) {
-	        List<Answer> answers =
-			        dto.getAnswers().stream()
-					        .map(
-							        answerDTO -> {
-								        try {
-									        Answer answer = answerService.mapToEntity(answerDTO);
-									        answer.setPrompt(prompt);
-									        return answer;
-								        } catch (Exception e) {
-									        log.error(
-											        "Error mapping answer DTO to entity for prompt DTO ID: " + dto.getId(),
-											        e);
-									        throw e;
-								        }
-							        })
-					        .collect(Collectors.toList());
-            prompt.setAnswers(answers);
+	        dto.getAnswers().forEach(answerDTO -> {
+		        try {
+			        Answer answer = answerService.mapToEntity(answerDTO);
+			        prompt.addAnswer(answer);
+		        } catch (Exception e) {
+			        log.error(
+					        "Error mapping answer DTO to entity for prompt DTO ID: " + dto.getId(),
+					        e);
+			        throw e;
+		        }
+	        });
         }
         log.info("Successfully mapped PromptDTO to entity for DTO ID: " + dto.getId());
         return prompt;
@@ -80,7 +73,7 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO, Pro
 				                        });
                     } else {
                         Answer newAnswer = answerService.mapToEntity(answerDTO);
-                        newAnswer.setPrompt(entity);
+	                    entity.addAnswer(newAnswer);
                         updatedAnswers.add(newAnswer);
                     }
                 } catch (Exception e) {
@@ -89,10 +82,8 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO, Pro
                 }
             }
 
-            entity.getAnswers().retainAll(updatedAnswers);
-            updatedAnswers.stream()
-                    .filter(answer -> !entity.getAnswers().contains(answer))
-                    .forEach(entity.getAnswers()::add);
+	        entity.getAnswers().clear();
+	        updatedAnswers.forEach(entity::addAnswer);
         } else {
 	        log.info(
 			        "No answers provided in DTO for prompt ID: "

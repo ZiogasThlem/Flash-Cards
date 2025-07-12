@@ -1,6 +1,7 @@
 package com.tilem.flashcards.mapper;
 
 import com.tilem.flashcards.data.dto.UserDTO;
+import com.tilem.flashcards.data.dto.UserResponseDTO;
 import com.tilem.flashcards.data.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,6 +14,9 @@ public interface UserMapper extends GenericMapper<User, UserDTO> {
 
 	@Mapping(target = "decks", source = "decks")
 	UserDTO toDto(User user);
+
+	@Mapping(target = "decks", source = "decks")
+	UserResponseDTO toResponseDto(User user);
 
 	@Mapping(target = "decks", ignore = true)
 	User toEntity(UserDTO userDTO);

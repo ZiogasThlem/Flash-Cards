@@ -2,6 +2,9 @@ package com.tilem.flashcards.controller;
 
 import com.tilem.flashcards.data.dto.AuthenticationRequest;
 import com.tilem.flashcards.data.dto.AuthenticationResponse;
+import com.tilem.flashcards.data.dto.UserDTO;
+import com.tilem.flashcards.data.dto.UserResponseDTO;
+import com.tilem.flashcards.mapper.UserMapper;
 import com.tilem.flashcards.service.UserService;
 import com.tilem.flashcards.util.JwtUtil;
 import org.springframework.http.ResponseEntity;
@@ -15,21 +18,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/authenticate")
+@RequestMapping("/authenticate")
 public class AuthenticationController {
 
 	private final AuthenticationManager authenticationManager;
 	private final UserService userService;
 	private final JwtUtil jwtUtil;
+	private final UserMapper userMapper;
 
 	public AuthenticationController(
-			AuthenticationManager authenticationManager, UserService userService, JwtUtil jwtUtil) {
+			AuthenticationManager authenticationManager, UserService userService, JwtUtil jwtUtil, UserMapper userMapper) {
 		this.authenticationManager = authenticationManager;
 		this.userService = userService;
 		this.jwtUtil = jwtUtil;
+		this.userMapper = userMapper;
 	}
 
-	@PostMapping
+	@PostMapping("/login")
 	public ResponseEntity<?> createAuthenticationToken(
 			@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 		try {
@@ -45,5 +50,11 @@ public class AuthenticationController {
 		final String jwt = jwtUtil.generateToken(userDetails);
 
 		return ResponseEntity.ok(new AuthenticationResponse(jwt));
+	}
+
+	@PostMapping("/register")
+	public ResponseEntity<UserResponseDTO> registerUser(@RequestBody UserDTO userDTO) {
+		UserDTO createdUserDTO = userService.create(userDTO);
+		return ResponseEntity.ok(userMapper.toResponseDto(userMapper.toEntity(createdUserDTO)));
 	}
 }

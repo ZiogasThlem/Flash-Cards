@@ -13,6 +13,7 @@ public interface PromptMapper extends GenericMapper<Prompt, PromptDTO> {
 
 	PromptDTO toDto(Prompt prompt);
 
+	@Mapping(target = "answers", ignore = true)
 	Prompt toEntity(PromptDTO promptDTO);
 
 	@Mapping(target = "tempUuid", ignore = true)

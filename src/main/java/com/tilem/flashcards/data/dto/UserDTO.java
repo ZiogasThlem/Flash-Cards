@@ -19,5 +19,7 @@ public class UserDTO {
 	@NotBlank(message = "Username is mandatory")
 	private String username;
 
+	private String password;
+
 	private List<DeckDTO> decks;
 }

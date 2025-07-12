@@ -75,7 +75,14 @@ class PromptServiceImplTest {
 					    .build();
 
 	    lenient().when(promptMapper.toDto(testPrompt)).thenReturn(testPromptDTO);
-	    lenient().when(promptMapper.toEntity(testPromptDTO)).thenReturn(testPrompt);
+	    lenient().when(promptMapper.toEntity(testPromptDTO)).thenAnswer(invocation -> {
+		    Prompt newPrompt = new Prompt();
+		    newPrompt.setId(testPromptDTO.getId());
+		    newPrompt.setPromptBody(testPromptDTO.getPromptBody());
+		    newPrompt.setHasSingleAnswer(testPromptDTO.getHasSingleAnswer());
+		    newPrompt.setAnswers(new ArrayList<>());
+		    return newPrompt;
+	    });
     }
 
     @Test

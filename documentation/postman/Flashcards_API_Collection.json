@@ -24,12 +24,54 @@
                           }
 						},
 						"url": {
-                          "raw": "{{baseUrl}}/authenticate",
+							"raw": "{{baseUrl}}/authenticate/login",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"authenticate"
+								"authenticate",
+								"login"
+							]
+						}
+					},
+                  "response": [],
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "if (jsonData && jsonData.token) {",
+                          "    pm.environment.set(\"jwt_token\", jsonData.token);",
+                          "}"
+                        ]
+                      }
+                    }
+                  ]
+				},
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"newuser\",\n    \"password\": \"newpassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/authenticate/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"authenticate",
+								"register"
 							]
 						}
 					},
@@ -143,7 +185,26 @@
 								"1"
 							]
 						}
-
+					},
+					"response": []
+				},
+				{
+					"name": "Assign Deck to User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/1/decks/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"decks",
+								"1"
+							]
+						}
 					},
 					"response": []
 				}
@@ -285,6 +346,25 @@
                   }
                 },
                 "response": []
+			  },
+				{
+					"name": "Get Flashcards by Deck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/decks/1/flashcards",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"decks",
+								"1",
+								"flashcards"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -398,18 +478,19 @@
 					"response": []
 				},
 				{
-                  "name": "Get Flashcards by Deck",
+					"name": "Record Review",
 					"request": {
-						"method": "GET",
+						"method": "POST",
                       "header": [],
 						"url": {
-                          "raw": "{{baseUrl}}/flashcards/deck/1",
+							"raw": "{{baseUrl}}/flashcards/1/review/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"flashcards",
-								"deck",
+								"1",
+								"review",
 								"1"
 							]
 						}
@@ -677,7 +758,7 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "http://localhost:8080/flashcards/api"
+			"value": "http://localhost:8080/flashcards"
         },
 		{
 			"key": "jwt_token",

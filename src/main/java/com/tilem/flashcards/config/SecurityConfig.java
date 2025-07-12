@@ -3,6 +3,7 @@ package com.tilem.flashcards.config;
 import com.tilem.flashcards.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -47,10 +48,10 @@ public class SecurityConfig {
 				.authorizeHttpRequests(
 						authorize ->
 								authorize
-										.requestMatchers("/api/authenticate", "/api/users")
-										.permitAll()
-										.anyRequest()
-										.authenticated())
+										.requestMatchers(HttpMethod.POST, "/authenticate/login").permitAll()
+										.requestMatchers(HttpMethod.POST, "/authenticate/register").permitAll()
+										.requestMatchers("/users/**").permitAll()
+										.anyRequest().authenticated())
 				.sessionManagement(
 						session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.cors(Customizer.withDefaults());

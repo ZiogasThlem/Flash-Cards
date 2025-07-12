@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/flashcards")
+@RequestMapping("/flashcards")
 public class FlashcardController extends GenericController<Flashcard, FlashcardDTO> {
+
+	private final FlashcardService flashcardService;
 
 	public FlashcardController(FlashcardService flashcardService) {
 		super(flashcardService);
+		this.flashcardService = flashcardService;
 	}
 
 	@GetMapping
@@ -43,6 +46,12 @@ public class FlashcardController extends GenericController<Flashcard, FlashcardD
 
 	@GetMapping("/deck/{deckId}")
 	public List<FlashcardDTO> getByDeck(@PathVariable Long deckId) {
-		return ((FlashcardService) service).getFlashcardsByDeck(deckId);
+		return flashcardService.getFlashcardsByDeck(deckId);
+	}
+
+	@PostMapping("/{flashcardId}/review/{userId}")
+	public ResponseEntity<Void> recordFlashcardReview(@PathVariable Long flashcardId, @PathVariable Long userId) {
+		flashcardService.recordFlashcardReview(flashcardId, userId);
+		return ResponseEntity.ok().build();
 	}
 }

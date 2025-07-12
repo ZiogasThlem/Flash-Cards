@@ -29,7 +29,18 @@ public class Prompt extends DbEntity {
     private YesNo hasSingleAnswer;
 
     @OneToMany(mappedBy = "prompt", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Answer> answers;
+    @lombok.Builder.Default
+    private List<Answer> answers = new java.util.ArrayList<>();
+
+	public void addAnswer(Answer answer) {
+		answers.add(answer);
+		answer.setPrompt(this);
+	}
+
+	public void removeAnswer(Answer answer) {
+		answers.remove(answer);
+		answer.setPrompt(null);
+	}
 
     @Override
     public String getEntityTitle() {

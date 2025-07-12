@@ -38,6 +38,16 @@ public class Deck extends DbEntity {
     @Builder.Default
     private List<Flashcard> flashcards = new ArrayList<>();
 
+    public void addFlashcard(Flashcard flashcard) {
+        flashcards.add(flashcard);
+        flashcard.setDeck(this);
+    }
+
+    public void removeFlashcard(Flashcard flashcard) {
+        flashcards.remove(flashcard);
+        flashcard.setDeck(null);
+    }
+
     @Override
     public String getEntityTitle() {
         return "Deck";
