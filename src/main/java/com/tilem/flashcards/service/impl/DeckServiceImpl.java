@@ -27,7 +27,7 @@ public class DeckServiceImpl extends GenericServiceImpl<Deck, DeckDTO, DeckRepos
     private static final LogWrapper log = LogWrapper.getLogger(MethodHandles.lookup().lookupClass());
 
 	public DeckServiceImpl(DeckRepository deckRepo, DeckMapper deckMapper) {
-		super(deckRepo, deckMapper);
+		super(deckRepo, deckMapper, Deck.class);
 		this.deckMapper = deckMapper;
     }
 

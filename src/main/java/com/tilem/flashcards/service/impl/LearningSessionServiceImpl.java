@@ -32,7 +32,7 @@ public class LearningSessionServiceImpl
 			UserRepository userRepository,
 			FlashcardRepository flashcardRepository,
 			LearningSessionMapper learningSessionMapper) {
-		super(learningSessionRepository, learningSessionMapper);
+		super(learningSessionRepository, learningSessionMapper, LearningSession.class);
         this.userRepository = userRepository;
         this.flashcardRepository = flashcardRepository;
 		this.learningSessionMapper = learningSessionMapper;

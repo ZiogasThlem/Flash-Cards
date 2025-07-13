@@ -46,7 +46,7 @@ public class FlashcardServiceImpl
 			LearningSessionService learningSessionService,
 			FlashcardMapper flashcardMapper,
 			PromptMapper promptMapper) {
-		super(flashcardRepository, flashcardMapper);
+		super(flashcardRepository, flashcardMapper, Flashcard.class);
 		this.deckRepository = deckRepository;
 		this.promptService = promptService;
 		this.learningSessionService = learningSessionService;

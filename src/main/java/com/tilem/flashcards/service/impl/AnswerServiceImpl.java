@@ -23,7 +23,7 @@ public class AnswerServiceImpl extends GenericServiceImpl<Answer, AnswerDTO, Ans
 			AnswerRepository answerRepository,
 			PromptRepository promptRepository,
 			AnswerMapper answerMapper) {
-		super(answerRepository, answerMapper);
+		super(answerRepository, answerMapper, Answer.class);
         this.promptRepository = promptRepository;
 		this.answerMapper = answerMapper;
     }

@@ -3,6 +3,8 @@ package com.tilem.flashcards.service;
 import java.util.List;
 
 public interface GenericService<T, U> {
+	Class<T> getEntityClass();
+
 	List<U> findAll();
 
 	U findById(Long id);

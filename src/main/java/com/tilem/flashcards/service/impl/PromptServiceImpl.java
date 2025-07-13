@@ -25,7 +25,7 @@ public class PromptServiceImpl extends GenericServiceImpl<Prompt, PromptDTO, Pro
 
 	public PromptServiceImpl(
 			PromptRepository promptRepository, AnswerService answerService, PromptMapper promptMapper) {
-		super(promptRepository, promptMapper);
+		super(promptRepository, promptMapper, Prompt.class);
         this.answerService = answerService;
 		this.promptMapper = promptMapper;
     }

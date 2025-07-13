@@ -28,7 +28,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDTO, UserRepos
 
     public UserServiceImpl(
             UserRepository userRepo, PasswordEncoder passwordEncoder, UserMapper userMapper, DeckRepository deckRepository) {
-        super(userRepo, userMapper);
+        super(userRepo, userMapper, User.class);
         this.passwordEncoder = passwordEncoder;
         this.deckRepository = deckRepository;
     }

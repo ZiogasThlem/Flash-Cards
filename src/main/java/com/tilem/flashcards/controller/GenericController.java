@@ -9,9 +9,11 @@ import java.util.List;
 public abstract class GenericController<T, U> {
 
 	protected final GenericService<T, U> service;
+	protected final String entityName;
 
 	public GenericController(GenericService<T, U> service) {
 		this.service = service;
+		this.entityName = service.getEntityClass().getSimpleName();
 	}
 
 	@GetMapping
