@@ -8,7 +8,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(
 		componentModel = "spring",
-		uses = {PromptMapper.class})
+		uses = {PromptMapper.class, YesNoMapper.class})
 public interface FlashcardMapper extends GenericMapper<Flashcard, FlashcardDTO> {
 
 	@Mapping(target = "deckId", source = "deck.id")
@@ -18,7 +18,5 @@ public interface FlashcardMapper extends GenericMapper<Flashcard, FlashcardDTO> 
 	Flashcard toEntity(FlashcardDTO flashcardDTO);
 
 	@Mapping(target = "deck", ignore = true)
-	@Mapping(target = "tempUuid", ignore = true)
-	@Mapping(target = "tempUniqueID", ignore = true)
 	void updateEntity(FlashcardDTO flashcardDTO, @MappingTarget Flashcard flashcard);
 }
