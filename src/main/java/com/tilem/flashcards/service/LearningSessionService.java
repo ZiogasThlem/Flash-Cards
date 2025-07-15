@@ -5,5 +5,5 @@ import com.tilem.flashcards.data.entity.LearningSession;
 
 public interface LearningSessionService
 		extends GenericService<LearningSession, LearningSessionDTO> {
-    LearningSessionDTO recordReview(Long userId, Long flashcardId);
+    LearningSessionDTO recordReview(Long userId, Long flashcardId, int quality);
 }

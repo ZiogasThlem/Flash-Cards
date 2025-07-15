@@ -64,9 +64,9 @@ public class FlashcardServiceImpl
 	}
 
 	@Override
-	public void recordFlashcardReview(Long flashcardId, Long userId) {
-		log.info("Recording review for flashcard ID: " + flashcardId + ", user ID: " + userId);
-		learningSessionService.recordReview(userId, flashcardId);
+	public void recordFlashcardReview(Long flashcardId, Long userId, int quality) {
+		log.info("Recording review for flashcard ID: " + flashcardId + ", user ID: " + userId + ", quality: " + quality);
+		learningSessionService.recordReview(userId, flashcardId, quality);
 		log.info("Review recorded for flashcard ID: " + flashcardId);
 	}
 

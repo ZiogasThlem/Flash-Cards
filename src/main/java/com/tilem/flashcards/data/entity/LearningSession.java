@@ -2,6 +2,7 @@ package com.tilem.flashcards.data.entity;
 
 import com.tilem.flashcards.data.enums.YesNo;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,18 +21,34 @@ public class LearningSession extends DbEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
+    @NotNull
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "flashcard_id", nullable = false)
+    @JoinColumn(name = "flashcard_id")
+    @NotNull
     private Flashcard flashcard;
 
-    @Column(name = "last_reviewed_at", nullable = false)
+    @Column(name = "last_reviewed_at")
+    @NotNull
     private LocalDateTime lastReviewedAt;
 
-    @Column(name = "next_review_at", nullable = false)
+    @Column(name = "next_review_at")
+    @NotNull
     private LocalDateTime nextReviewAt;
+
+    @Column(name = "repetitions")
+    @NotNull
+    private Integer repetitions;
+
+    @Column(name = "ease_factor")
+    @NotNull
+    private Double easeFactor;
+
+    @Column(name = "interval")
+    @NotNull
+    private Integer interval;
 
     @Column(name = "is_active")
     @Enumerated(EnumType.STRING)

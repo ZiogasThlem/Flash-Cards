@@ -13,5 +13,8 @@ public class LearningSessionDTO {
     private Long flashcardId;
     private LocalDateTime lastReviewedAt;
     private LocalDateTime nextReviewAt;
+    private int repetitions;
+    private double easeFactor;
+    private int interval;
     private String isActive;
 }

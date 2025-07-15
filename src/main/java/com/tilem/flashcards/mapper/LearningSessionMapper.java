@@ -14,16 +14,25 @@ public interface LearningSessionMapper extends GenericMapper<LearningSession, Le
 	@Mapping(target = "userId", source = "user.id")
 	@Mapping(target = "flashcardId", source = "flashcard.id")
 	@Mapping(target = "isActive", source = "isActive", qualifiedByName = "yesNoToString")
+	@Mapping(target = "repetitions", source = "repetitions")
+	@Mapping(target = "easeFactor", source = "easeFactor")
+	@Mapping(target = "interval", source = "interval")
 	LearningSessionDTO toDto(LearningSession learningSession);
 
 	@Mapping(target = "user", ignore = true)
 	@Mapping(target = "flashcard", ignore = true)
 	@Mapping(target = "isActive", source = "isActive", qualifiedByName = "stringToYesNo")
+	@Mapping(target = "repetitions", source = "repetitions")
+	@Mapping(target = "easeFactor", source = "easeFactor")
+	@Mapping(target = "interval", source = "interval")
 	LearningSession toEntity(LearningSessionDTO learningSessionDTO);
 
 	@Mapping(target = "user", ignore = true)
 	@Mapping(target = "flashcard", ignore = true)
 	@Mapping(target = "isActive", source = "isActive", qualifiedByName = "stringToYesNo")
+	@Mapping(target = "repetitions", source = "repetitions")
+	@Mapping(target = "easeFactor", source = "easeFactor")
+	@Mapping(target = "interval", source = "interval")
 	@Mapping(target = "tempUuid", ignore = true)
 	@Mapping(target = "tempUniqueID", ignore = true)
 	void updateEntity(

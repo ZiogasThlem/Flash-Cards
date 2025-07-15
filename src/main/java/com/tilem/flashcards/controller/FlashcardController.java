@@ -50,8 +50,8 @@ public class FlashcardController extends GenericController<Flashcard, FlashcardD
 	}
 
 	@PostMapping("/{flashcardId}/review/{userId}")
-	public ResponseEntity<Void> recordFlashcardReview(@PathVariable Long flashcardId, @PathVariable Long userId) {
-		flashcardService.recordFlashcardReview(flashcardId, userId);
+	public ResponseEntity<Void> recordFlashcardReview(@PathVariable Long flashcardId, @PathVariable Long userId, @RequestParam int quality) {
+		flashcardService.recordFlashcardReview(flashcardId, userId, quality);
 		return ResponseEntity.ok().build();
 	}
 }

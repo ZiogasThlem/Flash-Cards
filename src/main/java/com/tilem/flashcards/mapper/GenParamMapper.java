@@ -3,6 +3,7 @@ package com.tilem.flashcards.mapper;
 import com.tilem.flashcards.data.dto.GenParamDTO;
 import com.tilem.flashcards.data.entity.GenParam;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(

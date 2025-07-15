@@ -2,6 +2,8 @@ package com.tilem.flashcards.data.entity;
 
 import com.tilem.flashcards.data.enums.YesNo;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,10 +21,12 @@ public class GenParam extends DbEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String value;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "mandatory", length = 1)
+    @NotNull
     private YesNo mandatory;
 
     private String notes;

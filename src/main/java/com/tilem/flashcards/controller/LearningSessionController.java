@@ -23,8 +23,8 @@ public class LearningSessionController
 
     @PostMapping("/review")
     public ResponseEntity<LearningSessionDTO> recordReview(
-		    @RequestParam Long userId, @RequestParam Long flashcardId) {
-        LearningSessionDTO updatedSession = learningSessionService.recordReview(userId, flashcardId);
+		    @RequestParam Long userId, @RequestParam Long flashcardId, @RequestParam int quality) {
+        LearningSessionDTO updatedSession = learningSessionService.recordReview(userId, flashcardId, quality);
         return ResponseEntity.ok(updatedSession);
     }
 }

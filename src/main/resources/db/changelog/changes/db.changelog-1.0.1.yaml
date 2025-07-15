@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-sm2-columns-to-learning-session
+      author: your_name
+      changes:
+        - addColumn:
+            tableName: learning_session
+            columns:
+              - column:
+                  name: repetitions
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ease_factor
+                  type: DOUBLE
+                  defaultValueNumeric: 2.5
+                  constraints:
+                    nullable: false
+              - column:
+                  name: interval
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false

@@ -22,5 +22,6 @@ public interface DeckMapper extends GenericMapper<Deck, DeckDTO> {
 	@Mapping(target = "flashcards", ignore = true)
 	@Mapping(target = "tempUuid", ignore = true)
 	@Mapping(target = "tempUniqueID", ignore = true)
-	void updateEntity(DeckDTO dto, @MappingTarget Deck entity);
+	void updateEntity(
+			DeckDTO dto, @MappingTarget Deck entity);
 }

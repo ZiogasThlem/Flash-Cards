@@ -11,6 +11,7 @@ import com.tilem.flashcards.repository.LearningSessionRepository;
 import com.tilem.flashcards.repository.UserRepository;
 import com.tilem.flashcards.service.LearningSessionService;
 import com.tilem.flashcards.util.LogWrapper;
+import com.tilem.flashcards.util.SM2Algorithm;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +41,8 @@ public class LearningSessionServiceImpl
 
     @Override
     @Transactional
-    public LearningSessionDTO recordReview(Long userId, Long flashcardId) {
-        log.info("Recording review for user ID: " + userId + ", flashcard ID: " + flashcardId);
+    public LearningSessionDTO recordReview(Long userId, Long flashcardId, int quality) {
+        log.info("Recording review for user ID: " + userId + ", flashcard ID: " + flashcardId + ", quality: " + quality);
 	    LearningSession learningSession =
 			    repository
 					    .findByUserIdAndFlashcardId(userId, flashcardId)
@@ -75,14 +76,29 @@ public class LearningSessionServiceImpl
 								    return LearningSession.builder()
 										    .user(user)
 										    .flashcard(flashcard)
+										    .repetitions(0)
+										    .easeFactor(2.5)
+										    .interval(0)
 										    .isActive(YesNo.Y)
 										    .build();
-                });
+                            });
 
+        // Get current values for SM-2 algorithm
+        int currentRepetitions = learningSession.getRepetitions();
+        double currentEaseFactor = learningSession.getEaseFactor();
+        int currentInterval = learningSession.getInterval();
+
+        // Calculate next review data using SM-2 algorithm
+        SM2Algorithm.LearningSessionData sm2Data = SM2Algorithm.calculateNextReview(
+                quality, currentRepetitions, currentEaseFactor, currentInterval);
+
+        // Update learning session with new data
         learningSession.setLastReviewedAt(LocalDateTime.now());
-	    learningSession.setNextReviewAt(
-			    LocalDateTime.now().plusDays(1));
-	    learningSession.setIsActive(YesNo.Y);
+        learningSession.setNextReviewAt(sm2Data.getNextReviewDate());
+        learningSession.setRepetitions(sm2Data.getRepetitions());
+        learningSession.setEaseFactor(sm2Data.getEaseFactor());
+        learningSession.setInterval(sm2Data.getInterval());
+        learningSession.setIsActive(YesNo.Y);
 
 	    LearningSession savedSession = repository.save(learningSession);
 	    log.info(
