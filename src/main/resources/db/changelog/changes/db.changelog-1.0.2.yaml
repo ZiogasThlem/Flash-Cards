@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: modify-has_image_data-column-type
+      author: gemini
+      changes:
+        - modifyDataType:
+            tableName: flashcards
+            columnName: has_image_data
+            newDataType: char(1)

@@ -13,7 +13,12 @@ public interface GenParamMapper extends GenericMapper<GenParam, GenParamDTO> {
 
 	GenParamDTO toDto(GenParam genParam);
 
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "tempUuid", ignore = true)
+	@Mapping(target = "tempUniqueID", ignore = true)
 	GenParam toEntity(GenParamDTO genParamDTO);
 
+	@Mapping(target = "tempUuid", ignore = true)
+	@Mapping(target = "tempUniqueID", ignore = true)
 	void updateEntity(GenParamDTO genParamDTO, @MappingTarget GenParam genParam);
 }

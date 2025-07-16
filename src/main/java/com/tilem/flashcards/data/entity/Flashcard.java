@@ -22,6 +22,7 @@ public class Flashcard extends DbEntity {
     private Prompt prompt;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 1)
     private YesNo hasImageData;
 
     @ManyToOne

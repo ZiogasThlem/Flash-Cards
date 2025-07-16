@@ -17,9 +17,11 @@ public interface DeckMapper extends GenericMapper<Deck, DeckDTO> {
 
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "flashcards", ignore = true)
+	@Mapping(target = "users", ignore = true)
 	Deck toEntity(DeckDTO dto);
 
 	@Mapping(target = "flashcards", ignore = true)
+	@Mapping(target = "users", ignore = true)
 	@Mapping(target = "tempUuid", ignore = true)
 	@Mapping(target = "tempUniqueID", ignore = true)
 	void updateEntity(

@@ -18,15 +18,19 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
     private String secret;
 
     @Value("${jwt.expiration}")
     private Long expiration;
 
     private Key getSigningKey() {
-        byte[] keyBytes = Base64.getDecoder().decode(secret);
-        return Keys.hmacShaKeyFor(keyBytes);
+	    if (secret == null || secret.isEmpty()) {
+		    // Generate a secure random key if no secret is provided
+		    return Keys.secretKeyFor(SignatureAlgorithm.HS256);
+	    } else {
+		    byte[] keyBytes = Base64.getDecoder().decode(secret);
+		    return Keys.hmacShaKeyFor(keyBytes);
+	    }
     }
 
     public String extractUsername(String token) {
