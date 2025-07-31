@@ -39,7 +39,7 @@ public class DeckServiceImpl extends GenericServiceImpl<Deck, DeckDTO, DeckRepos
             List<String[]> records = reader.readAll();
             for (String[] record : records) {
                 if (record.length > 0) {
-	                DeckDTO deckDTO = DeckDTO.builder().name(record[0]).build();
+	                DeckDTO deckDTO = new DeckDTO(null, record[0], null, null, null);
                     importedDecks.add(create(deckDTO));
                 }
             }

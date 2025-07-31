@@ -55,6 +55,7 @@ public class FlashcardServiceImpl
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<FlashcardDTO> getFlashcardsByDeck(Long deckId) {
 		log.info("Fetching flashcards for deck ID: " + deckId);
 		List<FlashcardDTO> flashcards =
@@ -64,6 +65,7 @@ public class FlashcardServiceImpl
 	}
 
 	@Override
+	@Transactional
 	public void recordFlashcardReview(Long flashcardId, Long userId, int quality) {
 		log.info("Recording review for flashcard ID: " + flashcardId + ", user ID: " + userId + ", quality: " + quality);
 		learningSessionService.recordReview(userId, flashcardId, quality);
@@ -72,27 +74,21 @@ public class FlashcardServiceImpl
 
 	@Override
 	@Transactional
-	public List<FlashcardDTO> importFlashcardsFromFile(String fileContent) {
+	public List<FlashcardDTO> importFlashcardsFromFile(Long deckId, String fileContent) {
 		List<FlashcardDTO> importedFlashcards = new ArrayList<>();
 		try (CSVReader reader = new CSVReaderBuilder(new StringReader(fileContent)).build()) {
 			List<String[]> records = reader.readAll();
 			for (String[] record : records) {
 				if (record.length > 0) {
 					String promptBody = record[0];
-					PromptDTO promptDTO =
-							PromptDTO.builder()
-									.promptBody(promptBody)
-									.hasSingleAnswer(YesNo.Y)
-									.answers(new ArrayList<>())
-									.build();
+					PromptDTO promptDTO = new PromptDTO(null, promptBody, YesNo.Y, new ArrayList<>());
 
 					for (int i = 1; i < record.length; i++) {
-						AnswerDTO answerDTO = AnswerDTO.builder().answerBody(record[i]).build();
-						promptDTO.getAnswers().add(answerDTO);
+						AnswerDTO answerDTO = new AnswerDTO(null, null, record[i], null);
+						promptDTO.answers().add(answerDTO);
 					}
 
-					FlashcardDTO flashcardDTO =
-							FlashcardDTO.builder().prompt(promptDTO).hasImageData(YesNo.N).build();
+					FlashcardDTO flashcardDTO = new FlashcardDTO(null, deckId, promptDTO, YesNo.N);
 					importedFlashcards.add(create(flashcardDTO));
 				}
 			}

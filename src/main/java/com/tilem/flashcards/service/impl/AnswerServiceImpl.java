@@ -8,6 +8,7 @@ import com.tilem.flashcards.repository.PromptRepository;
 import com.tilem.flashcards.service.AnswerService;
 import com.tilem.flashcards.util.LogWrapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.invoke.MethodHandles;
 
@@ -29,11 +30,13 @@ public class AnswerServiceImpl extends GenericServiceImpl<Answer, AnswerDTO, Ans
     }
 
     @Override
+    @Transactional
     public Answer mapToEntity(AnswerDTO dto) {
 	    return answerMapper.toEntity(dto);
     }
 
     @Override
+    @Transactional
     public void updateEntity(Answer entity, AnswerDTO dto) {
 	    answerMapper.updateEntity(dto, entity);
     }

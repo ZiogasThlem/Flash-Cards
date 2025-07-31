@@ -54,4 +54,9 @@ public class FlashcardController extends GenericController<Flashcard, FlashcardD
 		flashcardService.recordFlashcardReview(flashcardId, userId, quality);
 		return ResponseEntity.ok().build();
 	}
+
+	@PostMapping("/decks/{deckId}/import")
+	public ResponseEntity<List<FlashcardDTO>> importFlashcards(@PathVariable Long deckId, @RequestBody String fileContent) {
+		return ResponseEntity.ok(flashcardService.importFlashcardsFromFile(deckId, fileContent));
+	}
 }

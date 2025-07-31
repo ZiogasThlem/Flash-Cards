@@ -58,28 +58,16 @@ class PromptServiceImplTest {
 
         testPrompt.setAnswers(new ArrayList<>(List.of(testAnswer1)));
 
-	    testAnswerDTO1 =
-			    AnswerDTO.builder()
-					    .id(10L)
-					    .promptId(1L)
-					    .answerBody("Test Answer Body 1")
-					    .notes("Notes 1")
-					    .build();
+	    testAnswerDTO1 = new AnswerDTO(10L, 1L, "Test Answer Body 1", "Notes 1");
 
-	    testPromptDTO =
-			    PromptDTO.builder()
-					    .id(1L)
-					    .promptBody("Test Prompt Body")
-					    .hasSingleAnswer(YesNo.Y)
-					    .answers(Collections.singletonList(testAnswerDTO1))
-					    .build();
+	    testPromptDTO = new PromptDTO(1L, "Test Prompt Body", YesNo.Y, Collections.singletonList(testAnswerDTO1));
 
 	    lenient().when(promptMapper.toDto(testPrompt)).thenReturn(testPromptDTO);
 	    lenient().when(promptMapper.toEntity(testPromptDTO)).thenAnswer(invocation -> {
 		    Prompt newPrompt = new Prompt();
-		    newPrompt.setId(testPromptDTO.getId());
-		    newPrompt.setPromptBody(testPromptDTO.getPromptBody());
-		    newPrompt.setHasSingleAnswer(testPromptDTO.getHasSingleAnswer());
+		    newPrompt.setId(testPromptDTO.id());
+		    newPrompt.setPromptBody(testPromptDTO.promptBody());
+		    newPrompt.setHasSingleAnswer(testPromptDTO.hasSingleAnswer());
 		    newPrompt.setAnswers(new ArrayList<>());
 		    return newPrompt;
 	    });
@@ -90,15 +78,15 @@ class PromptServiceImplTest {
 	    PromptDTO dto = promptMapper.toDto(testPrompt);
 
         assertNotNull(dto);
-        assertEquals(testPrompt.getId(), dto.getId());
-        assertEquals(testPrompt.getPromptBody(), dto.getPromptBody());
-        assertEquals(testPrompt.getHasSingleAnswer(), dto.getHasSingleAnswer());
-        assertNotNull(dto.getAnswers());
-        assertEquals(1, dto.getAnswers().size());
-        assertEquals(testAnswerDTO1.getId(), dto.getAnswers().get(0).getId());
-        assertEquals(testAnswerDTO1.getPromptId(), dto.getAnswers().get(0).getPromptId());
-        assertEquals(testAnswerDTO1.getAnswerBody(), dto.getAnswers().get(0).getAnswerBody());
-        assertEquals(testAnswerDTO1.getNotes(), dto.getAnswers().get(0).getNotes());
+	    assertEquals(testPrompt.getId(), dto.id());
+	    assertEquals(testPrompt.getPromptBody(), dto.promptBody());
+	    assertEquals(testPrompt.getHasSingleAnswer(), dto.hasSingleAnswer());
+	    assertNotNull(dto.answers());
+	    assertEquals(1, dto.answers().size());
+	    assertEquals(testAnswerDTO1.id(), dto.answers().get(0).id());
+	    assertEquals(testAnswerDTO1.promptId(), dto.answers().get(0).promptId());
+	    assertEquals(testAnswerDTO1.answerBody(), dto.answers().get(0).answerBody());
+	    assertEquals(testAnswerDTO1.notes(), dto.answers().get(0).notes());
     }
 
     @Test
@@ -108,8 +96,8 @@ class PromptServiceImplTest {
         Prompt prompt = promptService.mapToEntity(testPromptDTO);
 
         assertNotNull(prompt);
-        assertEquals(testPromptDTO.getPromptBody(), prompt.getPromptBody());
-        assertEquals(testPromptDTO.getHasSingleAnswer(), prompt.getHasSingleAnswer());
+	    assertEquals(testPromptDTO.promptBody(), prompt.getPromptBody());
+	    assertEquals(testPromptDTO.hasSingleAnswer(), prompt.getHasSingleAnswer());
         assertNotNull(prompt.getAnswers());
         assertEquals(1, prompt.getAnswers().size());
         assertEquals(testAnswer1, prompt.getAnswers().get(0));
@@ -131,19 +119,9 @@ class PromptServiceImplTest {
 	    existingAnswer.setNotes("Old Notes");
 	    existingPrompt.setAnswers(new ArrayList<>(List.of(existingAnswer)));
 
-	    PromptDTO updateDTO =
-			    PromptDTO.builder()
-					    .promptBody("New Prompt Body")
-					    .hasSingleAnswer(YesNo.Y)
-					    .answers(
-							    Arrays.asList(
-									    AnswerDTO.builder()
-											    .id(20L)
-											    .answerBody("Updated Answer Body")
-											    .notes("Updated Notes")
-											    .build(),
-									    AnswerDTO.builder().answerBody("New Answer Body").notes("New Notes").build()))
-					    .build();
+	    PromptDTO updateDTO = new PromptDTO(null, "New Prompt Body", YesNo.Y,
+			    Arrays.asList(new AnswerDTO(20L, null, "Updated Answer Body", "Updated Notes"),
+					    new AnswerDTO(null, null, "New Answer Body", "New Notes")));
 
 	    when(answerService.mapToEntity(any(AnswerDTO.class))).thenReturn(new Answer());
 	    doNothing().when(answerService).updateEntity(any(Answer.class), any(AnswerDTO.class));
@@ -157,9 +135,9 @@ class PromptServiceImplTest {
 					    any(Answer.class),
 					    argThat(
 							    dto ->
-									    dto.getId().equals(20L) && dto.getAnswerBody().equals("Updated Answer Body")));
+									    dto.id().equals(20L) && dto.answerBody().equals("Updated Answer Body")));
 	    verify(answerService, times(1))
-			    .mapToEntity(argThat(dto -> dto.getAnswerBody().equals("New Answer Body")));
+			    .mapToEntity(argThat(dto -> dto.answerBody().equals("New Answer Body")));
     }
 
     @Test
@@ -176,12 +154,7 @@ class PromptServiceImplTest {
         existingAnswer.setNotes("Old Notes");
         existingPrompt.setAnswers(new ArrayList<>(List.of(existingAnswer)));
 
-	    PromptDTO updateDTO =
-			    PromptDTO.builder()
-					    .promptBody("New Prompt Body")
-					    .hasSingleAnswer(YesNo.Y)
-					    .answers(new ArrayList<>())
-					    .build();
+	    PromptDTO updateDTO = new PromptDTO(null, "New Prompt Body", YesNo.Y, new ArrayList<>());
 
         promptService.updateEntity(existingPrompt, updateDTO);
 
@@ -203,11 +176,7 @@ class PromptServiceImplTest {
         existingAnswer.setNotes("Old Notes");
         existingPrompt.setAnswers(new ArrayList<>(List.of(existingAnswer)));
 
-	    PromptDTO updateDTO =
-			    PromptDTO.builder()
-					    .promptBody("New Prompt Body")
-					    .hasSingleAnswer(YesNo.Y)
-					    .build();
+	    PromptDTO updateDTO = new PromptDTO(null, "New Prompt Body", YesNo.Y, null);
 
 	    promptService.updateEntity(existingPrompt, updateDTO);
 

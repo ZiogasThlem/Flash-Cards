@@ -79,27 +79,10 @@ class FlashcardServiceImplTest {
         testFlashcard.setDeck(testDeck);
         testFlashcard.setPrompt(testPrompt);
 
-	    testFlashcardDTO =
-			    FlashcardDTO.builder()
-					    .id(1L)
-					    .deckId(1L)
-					    .prompt(
-							    PromptDTO.builder()
-									    .id(10L)
-									    .promptBody("Test Prompt")
-									    .hasSingleAnswer(YesNo.Y)
-									    .answers(
-											    Collections.singletonList(
-													    AnswerDTO.builder()
-                                .id(100L)
-                                .promptId(10L)
-                                .answerBody("Test Answer")
-                                .build()))
-									    .build())
-					    .build();
+	    testFlashcardDTO = new FlashcardDTO(1L, 1L, new PromptDTO(10L, "Test Prompt", YesNo.Y, Collections.singletonList(new AnswerDTO(100L, 10L, "Test Answer", null))), null);
 
 	    lenient().when(flashcardMapper.toDto(testFlashcard)).thenReturn(testFlashcardDTO);
-	    lenient().when(promptMapper.toDto(testPrompt)).thenReturn(testFlashcardDTO.getPrompt());
+	    lenient().when(promptMapper.toDto(testPrompt)).thenReturn(testFlashcardDTO.prompt());
     }
 
     @Test
@@ -110,7 +93,7 @@ class FlashcardServiceImplTest {
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(testFlashcardDTO.getId(), result.get(0).getId());
+	    assertEquals(testFlashcardDTO.id(), result.get(0).id());
         verify(flashcardRepository, times(1)).findByDeckId(1L);
 	    verify(flashcardMapper, times(1)).toDto(testFlashcard);
     }

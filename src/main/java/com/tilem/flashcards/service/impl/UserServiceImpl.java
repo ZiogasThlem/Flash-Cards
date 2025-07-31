@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
@@ -59,8 +60,13 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDTO, UserRepos
 
     @Override
     public UserDTO create(UserDTO dto) {
-        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-        return super.create(dto);
+        UserDTO updatedDto = new UserDTO(
+                dto.id(),
+                dto.username(),
+                passwordEncoder.encode(dto.password()),
+                dto.decks()
+        );
+        return super.create(updatedDto);
     }
 
     @Override
@@ -75,13 +81,20 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDTO, UserRepos
 
     @Override
     public UserDTO update(Long id, UserDTO dto) {
-        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
-            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        if (dto.password() != null && !dto.password().isEmpty()) {
+            UserDTO updatedDto = new UserDTO(
+                    dto.id(),
+                    dto.username(),
+                    passwordEncoder.encode(dto.password()),
+                    dto.decks()
+            );
+            return super.update(id, updatedDto);
         }
         return super.update(id, dto);
     }
 
     @Override
+    @Transactional
     public void assignDeckToUser(Long userId, Long deckId) {
         User user = repository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found"));

@@ -62,17 +62,12 @@ class DeckServiceImplTest {
 		List<Flashcard> flashcards = new ArrayList<>(Arrays.asList(flashcard1, flashcard2));
 		testDeck.setFlashcards(flashcards);
 
-		testDeckDTO =
-				DeckDTO.builder()
-						.id(1L)
-						.name("Test Deck")
-						.flashcards(Arrays.asList("Flashcard 100", "Flashcard 200"))
-						.build();
+		testDeckDTO = new DeckDTO(1L, "Test Deck", null, null, Arrays.asList("Flashcard 100", "Flashcard 200"));
 
 		lenient().when(deckMapper.toDto(testDeck)).thenReturn(testDeckDTO);
 		lenient()
 				.when(deckMapper.toEntity(testDeckDTO))
-				.thenReturn(Deck.builder().name(testDeckDTO.getName()).build());
+				.thenReturn(Deck.builder().name(testDeckDTO.name()).build());
 	}
 
 	@Test
@@ -80,10 +75,10 @@ class DeckServiceImplTest {
 		DeckDTO dto = deckMapper.toDto(testDeck);
 
 		assertNotNull(dto);
-		assertEquals(testDeck.getId(), dto.getId());
-		assertEquals(testDeck.getName(), dto.getName());
+		assertEquals(testDeck.getId(), dto.id());
+		assertEquals(testDeck.getName(), dto.name());
 
-		assertEquals(new HashSet<>(testDeckDTO.getFlashcards()), new HashSet<>(dto.getFlashcards()));
+		assertEquals(new HashSet<>(testDeckDTO.flashcards()), new HashSet<>(dto.flashcards()));
 	}
 
 	@Test
@@ -91,7 +86,7 @@ class DeckServiceImplTest {
 		Deck deck = deckMapper.toEntity(testDeckDTO);
 
 		assertNotNull(deck);
-		assertEquals(testDeckDTO.getName(), deck.getName());
+		assertEquals(testDeckDTO.name(), deck.getName());
 		assertNull(deck.getId());
 	}
 
@@ -101,7 +96,7 @@ class DeckServiceImplTest {
 		existingDeck.setId(2L);
 		existingDeck.setName("Old Name");
 
-		DeckDTO updateDTO = DeckDTO.builder().name("New Name").build();
+		DeckDTO updateDTO = new DeckDTO(null, "New Name", null, null, null);
 
 		deckMapper.updateEntity(updateDTO, existingDeck);
 		verify(deckMapper, times(1)).updateEntity(updateDTO, existingDeck);

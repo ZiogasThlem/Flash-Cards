@@ -10,5 +10,5 @@ public interface FlashcardService extends GenericService<Flashcard, FlashcardDTO
 
 	void recordFlashcardReview(Long flashcardId, Long userId, int quality);
 
-	List<FlashcardDTO> importFlashcardsFromFile(String fileContent);
+	List<FlashcardDTO> importFlashcardsFromFile(Long deckId, String fileContent);
 }
