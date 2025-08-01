@@ -3,6 +3,7 @@ package com.tilem.flashcards.service.impl;
 import com.tilem.flashcards.data.dto.UserDTO;
 import com.tilem.flashcards.data.entity.Deck;
 import com.tilem.flashcards.data.entity.User;
+import com.tilem.flashcards.data.enums.YesNo;
 import com.tilem.flashcards.mapper.UserMapper;
 import com.tilem.flashcards.repository.DeckRepository;
 import com.tilem.flashcards.repository.UserRepository;
@@ -48,7 +49,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDTO, UserRepos
                 throw new UsernameNotFoundException("User password not set for username: " + username);
             }
             return new org.springframework.security.core.userdetails.User(
-                    user.getUsername(), user.getPassword(), new ArrayList<>());
+                    user.getUsername(), user.getPassword(), user.getIsActive() == YesNo.Y, true, true, true, new ArrayList<>());
         } catch (UsernameNotFoundException e) {
             log.warning("User not found: " + username);
             throw e;
@@ -64,6 +65,11 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDTO, UserRepos
                 dto.id(),
                 dto.username(),
                 passwordEncoder.encode(dto.password()),
+                dto.isActive(),
+                dto.lastLogin(),
+                dto.firstname(),
+                dto.lastname(),
+                dto.email(),
                 dto.decks()
         );
         return super.create(updatedDto);
@@ -86,6 +92,11 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDTO, UserRepos
                     dto.id(),
                     dto.username(),
                     passwordEncoder.encode(dto.password()),
+                    dto.isActive(),
+                    dto.lastLogin(),
+                    dto.firstname(),
+                    dto.lastname(),
+                    dto.email(),
                     dto.decks()
             );
             return super.update(id, updatedDto);
@@ -103,6 +114,15 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserDTO, UserRepos
 
         user.addDeck(deck);
 
+        repository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void updateLastLogin(String username) {
+        User user = repository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+        user.setLastLogin(java.time.LocalDateTime.now());
         repository.save(user);
     }
 }

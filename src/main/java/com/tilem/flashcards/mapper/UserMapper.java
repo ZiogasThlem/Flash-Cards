@@ -13,9 +13,19 @@ import org.mapstruct.MappingTarget;
 public interface UserMapper extends GenericMapper<User, UserDTO> {
 
 	@Mapping(target = "decks", source = "decks")
+	@Mapping(target = "isActive", source = "isActive")
+	@Mapping(target = "lastLogin", source = "lastLogin")
+	@Mapping(target = "firstname", source = "firstname")
+	@Mapping(target = "lastname", source = "lastname")
+	@Mapping(target = "email", source = "email")
 	UserDTO toDto(User user);
 
 	@Mapping(target = "decks", source = "decks")
+	@Mapping(target = "isActive", source = "isActive")
+	@Mapping(target = "lastLogin", source = "lastLogin")
+	@Mapping(target = "firstname", source = "firstname")
+	@Mapping(target = "lastname", source = "lastname")
+	@Mapping(target = "email", source = "email")
 	UserResponseDTO toResponseDto(User user);
 
 	@Mapping(target = "decks", ignore = true)

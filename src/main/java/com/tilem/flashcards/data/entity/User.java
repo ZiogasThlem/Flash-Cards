@@ -1,9 +1,11 @@
 package com.tilem.flashcards.data.entity;
 
+import com.tilem.flashcards.data.enums.YesNo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,22 @@ public class User extends DbEntity {
 	@NotBlank
     @Column(name = "password")
     private String password;
+
+	@Column(name = "is_active")
+	@Enumerated(EnumType.STRING)
+	private YesNo isActive;
+
+	@Column(name = "last_login")
+	private LocalDateTime lastLogin;
+
+	@Column(name = "firstname")
+	private String firstname;
+
+	@Column(name = "lastname")
+	private String lastname;
+
+	@Column(name = "email")
+	private String email;
 
 	@ManyToMany(
 			cascade = {CascadeType.PERSIST, CascadeType.MERGE},
