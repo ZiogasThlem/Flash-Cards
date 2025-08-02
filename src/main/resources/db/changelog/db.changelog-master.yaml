@@ -1,7 +1,9 @@
 databaseChangeLog:
-  - include:
-      file: db/changelog/changes/db.changelog-1.0.1.yaml
-  - include:
-      file: db/changelog/changes/db.changelog-1.0.2.yaml
-  - include:
-      file: db/changelog/changes/db.changelog-1.0.3.yaml
+#  - include:
+#      file: db/changelog/changes/db.changelog-1.0.0.yaml
+#  - include:
+#      file: db/changelog/changes/db.changelog-1.0.1.yaml
+#  - include:
+#      file: db/changelog/changes/db.changelog-1.0.2.yaml
+#  - include:
+#      file: db/changelog/changes/db.changelog-1.0.3.yaml
