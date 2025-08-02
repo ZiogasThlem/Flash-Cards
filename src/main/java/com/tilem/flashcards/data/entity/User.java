@@ -78,6 +78,6 @@ public class User extends DbEntity {
 
     @Override
     public String getSimpleLabel() {
-        return username;
+        return firstname + " " + lastname;
     }
 }

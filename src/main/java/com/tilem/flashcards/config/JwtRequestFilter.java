@@ -1,6 +1,7 @@
 package com.tilem.flashcards.config;
 
 import com.tilem.flashcards.util.JwtUtil;
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,8 +28,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	}
 
     @Override
-    protected void doFilterInternal(
-		    HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    protected void doFilterInternal(@Nonnull HttpServletRequest request,
+                                    @Nonnull HttpServletResponse response,
+                                    @Nonnull FilterChain chain)
 		    throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
 
